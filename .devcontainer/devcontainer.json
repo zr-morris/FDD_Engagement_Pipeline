@@ -1,0 +1,26 @@
+{
+  "name": "KPMG FDD Pipeline",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:20",
+  "features": {
+    "ghcr.io/devcontainers/features/python:1": { "version": "3.11" }
+  },
+  "postCreateCommand": "pnpm install && npm install --prefix . express better-sqlite3 uuid multer && mkdir -p db && node db/seed.js",
+  "postStartCommand": "nohup node server.js > /tmp/server.log 2>&1 &",
+  "forwardPorts": [5173],
+  "portsAttributes": {
+    "5173": {
+      "label": "FDD Pipeline App",
+      "onAutoForward": "openBrowser"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash"
+      }
+    }
+  },
+  "remoteEnv": {
+    "PORT": "5173"
+  }
+}
