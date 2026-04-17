@@ -1,0 +1,1629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KPMG | FDD Pipeline</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            kpmg: {
+              blue: '#00338D',
+              'blue-dark': '#002266',
+              'blue-light': '#1a4fa0',
+              navy: '#1B1F3B',
+              'navy-light': '#272C4A',
+              medium: '#005EB8',
+              'medium-light': '#1a75cc',
+              light: '#0091DA',
+              'light-soft': '#e6f4fc',
+              'ice': '#f0f7ff',
+              white: '#FFFFFF',
+              'light-gray': '#F5F5F5',
+              'border-gray': '#E5E7EB',
+              'medium-gray': '#6D6E71',
+              'dark-gray': '#333333',
+              'charcoal': '#1a1a2e',
+              success: '#009A44',
+              'success-light': '#e6f5ec',
+              warning: '#F2A900',
+              'warning-light': '#fef7e6',
+              error: '#BC204B',
+              'error-light': '#fde8ee',
+              'sidebar-bg': '#FAFBFD',
+              'sidebar-border': '#E2E8F0',
+              'sidebar-hover': '#EEF2F7',
+              'sidebar-active': '#E8F0FE',
+              'sidebar-text': '#475569',
+              'sidebar-text-active': '#00338D',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #a1a1a1; }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes slideInRight { from { transform: translateX(100%); } to { transform: translateX(0); } }
+    @keyframes slideOutRight { from { transform: translateX(0); } to { transform: translateX(100%); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+    @keyframes toastIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    @keyframes toastOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
+    @keyframes modalIn { from { opacity: 0; transform: scale(0.95) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+
+    .animate-pulse-dot { animation: pulse-dot 1.5s ease-in-out infinite; }
+    .animate-spin-slow { animation: spin 1s linear infinite; }
+    .animate-slide-in { animation: slideInRight 0.3s ease-out forwards; }
+    .animate-slide-out { animation: slideOutRight 0.3s ease-in forwards; }
+    .animate-fade-in { animation: fadeIn 0.2s ease-out forwards; }
+    .animate-toast-in { animation: toastIn 0.3s ease-out forwards; }
+    .animate-toast-out { animation: toastOut 0.3s ease-in forwards; }
+    .animate-modal-in { animation: modalIn 0.3s ease-out forwards; }
+
+    .sidebar-transition { transition: transform 0.3s ease, width 0.3s ease; }
+    .stage-card { transition: transform 0.15s ease, box-shadow 0.15s ease; }
+    .stage-card:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .btn-transition { transition: background-color 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease; }
+    .btn-transition:active { transform: scale(0.97); }
+    .nav-item { transition: background-color 0.15s ease, border-color 0.15s ease; }
+    .modal-overlay { background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); }
+    .progress-bar-fill { transition: width 0.5s ease-in-out; }
+    .panel-overlay { background: rgba(0, 0, 0, 0.3); backdrop-filter: blur(2px); }
+
+    /* Markdown prose styling */
+    .prose-ai { font-size: 0.875rem; line-height: 1.6; color: #333; }
+    .prose-ai h1 { font-size: 1.25rem; font-weight: 700; margin: 1.25rem 0 0.5rem; color: #00338D; border-bottom: 1px solid #E5E7EB; padding-bottom: 0.375rem; }
+    .prose-ai h2 { font-size: 1.1rem; font-weight: 700; margin: 1rem 0 0.375rem; color: #1B1F3B; }
+    .prose-ai h3 { font-size: 0.95rem; font-weight: 600; margin: 0.875rem 0 0.25rem; color: #333; }
+    .prose-ai h4 { font-size: 0.875rem; font-weight: 600; margin: 0.75rem 0 0.25rem; color: #475569; }
+    .prose-ai p { margin: 0.375rem 0; }
+    .prose-ai ul, .prose-ai ol { margin: 0.375rem 0; padding-left: 1.5rem; }
+    .prose-ai li { margin: 0.2rem 0; }
+    .prose-ai li::marker { color: #005EB8; }
+    .prose-ai strong { color: #1B1F3B; font-weight: 600; }
+    .prose-ai em { color: #475569; }
+    .prose-ai code { background: #F0F7FF; color: #00338D; padding: 0.125rem 0.375rem; border-radius: 0.25rem; font-size: 0.8rem; font-family: 'JetBrains Mono', monospace; }
+    .prose-ai pre { background: #1a1a2e; color: #e2e8f0; padding: 1rem; border-radius: 0.5rem; overflow-x: auto; margin: 0.5rem 0; font-size: 0.8rem; }
+    .prose-ai pre code { background: none; color: inherit; padding: 0; }
+    .prose-ai table { width: 100%; border-collapse: collapse; margin: 0.5rem 0; font-size: 0.8rem; }
+    .prose-ai th { background: #F0F7FF; border: 1px solid #E5E7EB; padding: 0.375rem 0.5rem; text-align: left; font-weight: 600; color: #00338D; }
+    .prose-ai td { border: 1px solid #E5E7EB; padding: 0.375rem 0.5rem; }
+    .prose-ai tr:nth-child(even) td { background: #FAFBFD; }
+    .prose-ai blockquote { border-left: 3px solid #005EB8; padding: 0.375rem 0.75rem; margin: 0.5rem 0; background: #F0F7FF; color: #475569; }
+    .prose-ai hr { border: none; border-top: 1px solid #E5E7EB; margin: 0.75rem 0; }
+    .prose-ai a { color: #005EB8; text-decoration: underline; }
+
+    /* Live activity feed animation */
+    @keyframes feedPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
+    .feed-pulse { animation: feedPulse 2s ease-in-out infinite; }
+    .activity-feed { max-height: 200px; overflow-y: auto; }
+    .activity-feed::-webkit-scrollbar { width: 4px; }
+    .activity-feed::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 2px; }
+  </style>
+</head>
+<body class="bg-kpmg-light-gray font-sans text-kpmg-dark-gray">
+  <div class="fixed top-0 left-0 right-0 h-1 z-[60]" style="background: linear-gradient(90deg, #00338D, #005EB8, #0091DA, #005EB8, #00338D);"></div>
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="fixed top-4 right-4 z-[9999] flex flex-col gap-3 max-w-sm w-full pointer-events-none"></div>
+
+  <!-- Header -->
+  <header class="fixed top-0 left-0 right-0 h-16 z-50 flex items-center px-4 shadow-lg" style="background: linear-gradient(135deg, #1B1F3B 0%, #00338D 100%);">
+    <button id="sidebar-toggle" class="lg:hidden mr-3 text-white hover:text-kpmg-light p-1 btn-transition rounded" onclick="toggleSidebar()">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+    <div class="flex items-center gap-3 flex-shrink-0">
+      <img src="https://app.athenaintel.com/asset/asset_a7f8da8d-1faf-4d6c-a442-b6881f01208f.png" alt="KPMG" class="h-8 w-auto" style="filter: brightness(0) invert(1);">
+      <div class="hidden sm:block h-8 w-px bg-white/20"></div>
+      <h1 class="hidden sm:block text-white font-semibold text-lg tracking-tight">Financial Due Diligence Pipeline</h1>
+      <h1 class="sm:hidden text-white font-semibold text-sm tracking-tight">FDD Pipeline</h1>
+    </div>
+    <div class="ml-auto flex items-center gap-4">
+      <div class="hidden md:flex items-center gap-2 text-white/60 text-sm">
+        <div class="w-2 h-2 rounded-full bg-kpmg-success animate-pulse-dot"></div>
+        <span>System Online</span>
+      </div>
+      <div class="w-8 h-8 rounded-full bg-kpmg-medium flex items-center justify-center text-white text-sm font-semibold">KP</div>
+    </div>
+  </header>
+
+  <!-- Sidebar Overlay (mobile) -->
+  <div id="sidebar-overlay" class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden" onclick="toggleSidebar()"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="fixed top-16 left-0 bottom-0 w-64 bg-kpmg-sidebar-bg border-r border-kpmg-sidebar-border z-40 sidebar-transition transform -translate-x-full lg:translate-x-0 overflow-y-auto">
+    <nav class="py-4">
+      <div class="px-4 mb-6">
+        <p class="text-kpmg-medium-gray text-[11px] font-semibold uppercase tracking-widest mb-3">Navigation</p>
+      </div>
+      <ul class="space-y-1 px-2">
+        <li>
+          <button onclick="navigateTo('dashboard')" data-nav="dashboard" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-kpmg-sidebar-text hover:bg-kpmg-sidebar-hover hover:text-kpmg-dark-gray text-sm font-medium">
+            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1h-2z"/></svg>
+            <span>Dashboard</span>
+          </button>
+        </li>
+        <li>
+          <button onclick="openNewEngagementModal()" data-nav="new-engagement" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-kpmg-sidebar-text hover:bg-kpmg-sidebar-hover hover:text-kpmg-dark-gray text-sm font-medium">
+            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v16m8-8H4"/></svg>
+            <span>New Engagement</span>
+          </button>
+        </li>
+        <li>
+          <button onclick="navigateTo('data-room')" data-nav="data-room" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-kpmg-sidebar-text hover:bg-kpmg-sidebar-hover hover:text-kpmg-dark-gray text-sm font-medium">
+            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+            <span>Data Room</span>
+          </button>
+        </li>
+        <li>
+          <button onclick="navigateTo('engagements-list')" data-nav="engagements-list" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-kpmg-sidebar-text hover:bg-kpmg-sidebar-hover hover:text-kpmg-dark-gray text-sm font-medium">
+            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+            <span>Active Engagements</span>
+          </button>
+        </li>
+        <li>
+          <button onclick="navigateTo('dashboard')" data-nav="history" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-kpmg-sidebar-text hover:bg-kpmg-sidebar-hover hover:text-kpmg-dark-gray text-sm font-medium">
+            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span>History</span>
+          </button>
+        </li>
+        <li>
+          <button onclick="navigateTo('dashboard')" data-nav="settings" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-kpmg-sidebar-text hover:bg-kpmg-sidebar-hover hover:text-kpmg-dark-gray text-sm font-medium">
+            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+            <span>Settings</span>
+          </button>
+        </li>
+      </ul>
+      <div class="mt-8 mx-4 pt-4 border-t border-kpmg-sidebar-border">
+        <div class="px-2 py-3 rounded-lg bg-kpmg-ice border border-kpmg-border-gray">
+          <p class="text-kpmg-medium-gray text-[11px] font-medium uppercase tracking-wider mb-1">Pipeline Version</p>
+          <p class="text-kpmg-blue text-sm font-mono font-semibold">v2.4.1</p>
+        </div>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main id="main-content" class="lg:ml-64 pt-16 min-h-screen transition-all duration-300">
+    <div class="p-4 md:p-6 lg:p-8">
+
+      <!-- ==================== DASHBOARD VIEW ==================== -->
+      <div id="view-dashboard" class="view-container">
+        <div class="mb-8">
+          <h2 class="text-2xl font-bold text-kpmg-dark-gray">Dashboard</h2>
+          <p class="text-kpmg-medium-gray mt-1">Overview of all financial due diligence engagements</p>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 border-t-2 border-t-kpmg-blue p-5 hover:shadow-md transition-shadow">
+            <div class="flex items-center justify-between mb-3">
+              <div class="w-10 h-10 rounded-lg bg-kpmg-blue/10 flex items-center justify-center">
+                <svg class="w-5 h-5 text-kpmg-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+              </div>
+              <span class="text-xs font-medium text-kpmg-medium-gray uppercase tracking-wider">Total</span>
+            </div>
+            <p id="stat-total" class="text-3xl font-bold text-kpmg-dark-gray">0</p>
+            <p class="text-sm text-kpmg-medium-gray mt-1">All engagements</p>
+          </div>
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 border-t-2 border-t-kpmg-light p-5 hover:shadow-md transition-shadow">
+            <div class="flex items-center justify-between mb-3">
+              <div class="w-10 h-10 rounded-lg bg-kpmg-light/10 flex items-center justify-center">
+                <svg class="w-5 h-5 text-kpmg-light" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+              </div>
+              <span class="text-xs font-medium text-kpmg-medium-gray uppercase tracking-wider">Active</span>
+            </div>
+            <p id="stat-active" class="text-3xl font-bold text-kpmg-light">0</p>
+            <p class="text-sm text-kpmg-medium-gray mt-1">Currently running</p>
+          </div>
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 border-t-2 border-t-kpmg-warning p-5 hover:shadow-md transition-shadow">
+            <div class="flex items-center justify-between mb-3">
+              <div class="w-10 h-10 rounded-lg bg-kpmg-warning/10 flex items-center justify-center">
+                <svg class="w-5 h-5 text-kpmg-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              </div>
+              <span class="text-xs font-medium text-kpmg-medium-gray uppercase tracking-wider">In Progress</span>
+            </div>
+            <p id="stat-progress" class="text-3xl font-bold text-kpmg-warning">0</p>
+            <p class="text-sm text-kpmg-medium-gray mt-1">Stages executing</p>
+          </div>
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 border-t-2 border-t-kpmg-success p-5 hover:shadow-md transition-shadow">
+            <div class="flex items-center justify-between mb-3">
+              <div class="w-10 h-10 rounded-lg bg-kpmg-success/10 flex items-center justify-center">
+                <svg class="w-5 h-5 text-kpmg-success" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              </div>
+              <span class="text-xs font-medium text-kpmg-medium-gray uppercase tracking-wider">Completed</span>
+            </div>
+            <p id="stat-completed" class="text-3xl font-bold text-kpmg-success">0</p>
+            <p class="text-sm text-kpmg-medium-gray mt-1">Delivered</p>
+          </div>
+        </div>
+
+        <!-- Recent Engagements -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200">
+          <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+            <h3 class="text-lg font-semibold text-kpmg-dark-gray">Recent Engagements</h3>
+            <button onclick="openNewEngagementModal()" class="btn-transition px-4 py-2 bg-kpmg-blue text-white text-sm font-medium rounded-lg hover:bg-kpmg-medium shadow-sm">+ New Engagement</button>
+          </div>
+          <div id="recent-engagements-list" class="divide-y divide-gray-100"></div>
+          <div id="no-engagements-msg" class="hidden p-12 text-center">
+            <div class="w-16 h-16 rounded-full bg-gray-100 mx-auto mb-4 flex items-center justify-center">
+              <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+            </div>
+            <p class="text-gray-500 font-medium">No engagements yet</p>
+            <p class="text-gray-400 text-sm mt-1">Create your first engagement to get started</p>
+            <button onclick="openNewEngagementModal()" class="mt-4 btn-transition px-5 py-2.5 bg-kpmg-blue text-white text-sm font-medium rounded-lg hover:bg-kpmg-medium shadow-sm">Create Engagement</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== ENGAGEMENTS LIST VIEW ==================== -->
+      <div id="view-engagements-list" class="view-container hidden">
+        <div class="mb-8 flex items-center justify-between flex-wrap gap-4">
+          <div>
+            <h2 class="text-2xl font-bold text-kpmg-dark-gray">Active Engagements</h2>
+            <p class="text-kpmg-medium-gray mt-1">Manage and monitor all FDD engagements</p>
+          </div>
+          <button onclick="openNewEngagementModal()" class="btn-transition px-4 py-2.5 bg-kpmg-blue text-white text-sm font-medium rounded-lg hover:bg-kpmg-medium shadow-sm">+ New Engagement</button>
+        </div>
+        <div id="engagements-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6"></div>
+        <div id="no-engagements-grid-msg" class="hidden py-16 text-center">
+          <div class="w-20 h-20 rounded-full bg-gray-100 mx-auto mb-4 flex items-center justify-center">
+            <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+          </div>
+          <p class="text-gray-500 font-medium text-lg">No engagements found</p>
+          <p class="text-gray-400 text-sm mt-1">Start by creating a new engagement</p>
+        </div>
+      </div>
+
+      <!-- ==================== ENGAGEMENT DETAIL VIEW ==================== -->
+      <div id="view-engagement" class="view-container hidden">
+        <button onclick="navigateTo('dashboard')" class="mb-4 flex items-center gap-2 text-kpmg-medium-gray hover:text-kpmg-blue text-sm font-medium btn-transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+          Back to Dashboard
+        </button>
+
+        <!-- Engagement Header Card -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+          <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+            <div class="flex-1">
+              <div class="flex items-center gap-3 mb-2 flex-wrap">
+                <h2 id="eng-title" class="text-2xl font-bold text-kpmg-dark-gray"></h2>
+                <span id="eng-status-badge" class="px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider"></span>
+              </div>
+              <div class="flex items-center gap-2 text-kpmg-medium-gray text-sm mb-4">
+                <span>for</span>
+                <span id="eng-client" class="font-semibold text-kpmg-dark-gray"></span>
+              </div>
+              <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-3 text-sm">
+                <div><p class="text-kpmg-medium-gray text-xs uppercase tracking-wider font-medium">Engagement Type</p><p id="eng-type" class="font-semibold text-kpmg-dark-gray mt-0.5"></p></div>
+                <div><p class="text-kpmg-medium-gray text-xs uppercase tracking-wider font-medium">Deal Type</p><p id="eng-deal-type" class="font-semibold text-kpmg-dark-gray mt-0.5"></p></div>
+                <div><p class="text-kpmg-medium-gray text-xs uppercase tracking-wider font-medium">Industry</p><p id="eng-industry" class="font-semibold text-kpmg-dark-gray mt-0.5"></p></div>
+                <div><p class="text-kpmg-medium-gray text-xs uppercase tracking-wider font-medium">Enterprise Value</p><p id="eng-ev" class="font-semibold text-kpmg-dark-gray mt-0.5"></p></div>
+                <div><p class="text-kpmg-medium-gray text-xs uppercase tracking-wider font-medium">Timeline</p><p id="eng-timeline" class="font-semibold text-kpmg-dark-gray mt-0.5"></p></div>
+                <div><p class="text-kpmg-medium-gray text-xs uppercase tracking-wider font-medium">Engagement Partner</p><p id="eng-partner" class="font-semibold text-kpmg-dark-gray mt-0.5"></p></div>
+                <div><p class="text-kpmg-medium-gray text-xs uppercase tracking-wider font-medium">Created</p><p id="eng-created" class="font-semibold text-kpmg-dark-gray mt-0.5"></p></div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-6 pt-4 border-t border-gray-100">
+            <div class="flex items-center justify-between mb-2">
+              <p class="text-sm font-medium text-kpmg-dark-gray">Pipeline Progress</p>
+              <p id="eng-progress-text" class="text-sm font-bold text-kpmg-blue">0%</p>
+            </div>
+            <div class="w-full h-2.5 bg-gray-200 rounded-full overflow-hidden">
+              <div id="eng-progress-bar" class="h-full bg-gradient-to-r from-kpmg-blue to-kpmg-light rounded-full progress-bar-fill" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pipeline Stages Container -->
+        <div id="pipeline-stages" class="space-y-8"></div>
+      </div>
+
+      <!-- ==================== DATA ROOM VIEW ==================== -->
+        <div id="view-data-room" class="view-container hidden">
+          <div class="mb-6 flex items-center justify-between flex-wrap gap-4">
+            <div>
+              <h2 class="text-2xl font-bold text-kpmg-dark-gray">Data Room</h2>
+              <p class="text-kpmg-medium-gray mt-1" id="data-room-subtitle">Upload and manage engagement files</p>
+            </div>
+            <label class="btn-transition px-4 py-2.5 bg-kpmg-blue text-white text-sm font-semibold rounded-lg hover:bg-kpmg-blue-dark shadow-sm cursor-pointer flex items-center gap-2">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+              Upload Files
+              <input type="file" multiple class="hidden" onchange="handleFileUpload(this.files)" id="data-room-file-input">
+            </label>
+          </div>
+      
+          <!-- Drop zone -->
+          <div id="drop-zone" class="border-2 border-dashed border-gray-300 rounded-xl p-8 mb-6 text-center transition-colors hover:border-kpmg-blue hover:bg-kpmg-ice/30"
+               ondragover="event.preventDefault(); this.classList.add('border-kpmg-blue','bg-kpmg-ice/30');"
+               ondragleave="this.classList.remove('border-kpmg-blue','bg-kpmg-ice/30');"
+               ondrop="event.preventDefault(); this.classList.remove('border-kpmg-blue','bg-kpmg-ice/30'); handleFileUpload(event.dataTransfer.files);">
+            <svg class="w-10 h-10 text-kpmg-medium-gray mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+            <p class="text-sm text-kpmg-medium-gray">Drag and drop files here, or click <strong class="text-kpmg-blue">Upload Files</strong> above</p>
+            <p class="text-xs text-kpmg-medium-gray mt-1">Supports PDFs, Excel, Word, CSV, and text files up to 100MB</p>
+          </div>
+      
+          <!-- File list -->
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+              <h3 class="font-semibold text-kpmg-dark-gray">Uploaded Files</h3>
+              <span id="file-count-badge" class="text-xs text-kpmg-medium-gray bg-gray-100 px-2 py-0.5 rounded-full">0 files</span>
+            </div>
+            <div id="file-list-container">
+              <div id="file-list-empty" class="p-10 text-center">
+                <svg class="w-12 h-12 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 19a2 2 0 01-2-2V7a2 2 0 012-2h4l2 2h4a2 2 0 012 2v1M5 19h14a2 2 0 002-2v-5a2 2 0 00-2-2H9a2 2 0 00-2 2v5a2 2 0 01-2 2z"/></svg>
+                <p class="text-kpmg-medium-gray text-sm">No files uploaded yet</p>
+                <p class="text-xs text-kpmg-medium-gray mt-1">Upload files to populate the data room</p>
+              </div>
+              <table id="file-list-table" class="w-full hidden">
+                <thead class="bg-gray-50 border-b border-gray-200">
+                  <tr>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-kpmg-medium-gray uppercase tracking-wider">File</th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-kpmg-medium-gray uppercase tracking-wider">Size</th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-kpmg-medium-gray uppercase tracking-wider">Tagged Stage</th>
+                    <th class="px-6 py-3 text-left text-xs font-semibold text-kpmg-medium-gray uppercase tracking-wider">Uploaded</th>
+                    <th class="px-6 py-3 text-right text-xs font-semibold text-kpmg-medium-gray uppercase tracking-wider">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="file-list-body" class="divide-y divide-gray-100"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+    </div>
+  </main>
+
+
+  <!-- ==================== NEW ENGAGEMENT MODAL ==================== -->
+  <div id="new-engagement-modal" class="fixed inset-0 z-[60] hidden">
+    <div class="modal-overlay absolute inset-0" onclick="closeNewEngagementModal()"></div>
+    <div class="absolute inset-0 flex items-center justify-center p-4">
+      <div class="animate-modal-in bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto relative">
+        <div class="sticky top-0 bg-white px-6 py-4 border-b border-gray-200 rounded-t-2xl flex items-center justify-between z-10">
+          <div>
+            <h3 class="text-xl font-bold text-kpmg-dark-gray">New Engagement</h3>
+            <p class="text-sm text-kpmg-medium-gray mt-0.5">Create a new Financial Due Diligence engagement</p>
+          </div>
+          <button onclick="closeNewEngagementModal()" class="p-2 hover:bg-gray-100 rounded-lg btn-transition text-gray-400 hover:text-gray-600">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+        <form id="new-engagement-form" onsubmit="handleCreateEngagement(event)" class="p-6 space-y-5">
+          <div>
+            <label for="field-target" class="block text-sm font-semibold text-kpmg-dark-gray mb-1.5">Target Company Name <span class="text-kpmg-error">*</span></label>
+            <input type="text" id="field-target" name="target_company" required placeholder="e.g. Acme Corp" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-kpmg-blue/30 focus:border-kpmg-blue transition-colors">
+          </div>
+          <div>
+            <label for="field-client" class="block text-sm font-semibold text-kpmg-dark-gray mb-1.5">Client Name / Buyer <span class="text-kpmg-error">*</span></label>
+            <input type="text" id="field-client" name="client_name" required placeholder="e.g. Summit Capital Partners" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-kpmg-blue/30 focus:border-kpmg-blue transition-colors">
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label for="field-eng-type" class="block text-sm font-semibold text-kpmg-dark-gray mb-1.5">Engagement Type</label>
+              <select id="field-eng-type" name="engagement_type" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-kpmg-blue/30 focus:border-kpmg-blue transition-colors bg-white">
+                <option value="Full FDD">Full FDD</option>
+                <option value="Red Flag / Phase I">Red Flag / Phase I</option>
+                <option value="Vendor DD">Vendor DD</option>
+              </select>
+            </div>
+            <div>
+              <label for="field-deal-type" class="block text-sm font-semibold text-kpmg-dark-gray mb-1.5">Deal Type</label>
+              <select id="field-deal-type" name="deal_type" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-kpmg-blue/30 focus:border-kpmg-blue transition-colors bg-white">
+                <option value="Buy-Side (PE Sponsor)">Buy-Side (PE Sponsor)</option>
+                <option value="Buy-Side (Strategic)">Buy-Side (Strategic)</option>
+                <option value="Sell-Side">Sell-Side</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label for="field-industry" class="block text-sm font-semibold text-kpmg-dark-gray mb-1.5">Industry / Sector</label>
+              <input type="text" id="field-industry" name="industry" placeholder="e.g. Healthcare, SaaS, Manufacturing" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-kpmg-blue/30 focus:border-kpmg-blue transition-colors">
+            </div>
+            <div>
+              <label for="field-ev" class="block text-sm font-semibold text-kpmg-dark-gray mb-1.5">Estimated Enterprise Value</label>
+              <input type="text" id="field-ev" name="enterprise_value" placeholder="e.g. $250M" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-kpmg-blue/30 focus:border-kpmg-blue transition-colors">
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label for="field-timeline" class="block text-sm font-semibold text-kpmg-dark-gray mb-1.5">Deal Timeline (weeks)</label>
+              <input type="number" id="field-timeline" name="deal_timeline" min="1" max="52" placeholder="e.g. 6" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-kpmg-blue/30 focus:border-kpmg-blue transition-colors">
+            </div>
+            <div>
+              <label for="field-partner" class="block text-sm font-semibold text-kpmg-dark-gray mb-1.5">Engagement Partner</label>
+              <input type="text" id="field-partner" name="engagement_partner" placeholder="e.g. Jane Smith" class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-kpmg-blue/30 focus:border-kpmg-blue transition-colors">
+            </div>
+          </div>
+          <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
+            <button type="button" onclick="closeNewEngagementModal()" class="px-5 py-2.5 text-sm font-medium text-kpmg-medium-gray hover:text-kpmg-dark-gray hover:bg-gray-100 rounded-lg btn-transition">Cancel</button>
+            <button type="submit" id="btn-create-engagement" class="px-6 py-2.5 bg-kpmg-blue text-white text-sm font-semibold rounded-lg hover:bg-kpmg-medium shadow-sm btn-transition flex items-center gap-2">
+              <span>Create Engagement</span>
+              <svg id="create-spinner" class="hidden w-4 h-4 animate-spin-slow" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== STAGE DETAIL SLIDE-OUT PANEL ==================== -->
+  <div id="stage-panel" class="fixed inset-0 z-[55] hidden">
+    <div class="panel-overlay absolute inset-0" onclick="closeStagePanel()"></div>
+    <div id="stage-panel-inner" class="absolute top-0 right-0 bottom-0 w-full max-w-xl bg-white shadow-2xl overflow-y-auto animate-slide-in">
+      <div class="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 z-10">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3 min-w-0">
+            <span id="panel-stage-icon" class="text-2xl flex-shrink-0"></span>
+            <div class="min-w-0">
+              <h3 id="panel-stage-name" class="text-lg font-bold text-kpmg-dark-gray truncate"></h3>
+              <p id="panel-stage-key" class="text-xs font-mono text-kpmg-medium-gray"></p>
+            </div>
+          </div>
+          <button onclick="closeStagePanel()" class="p-2 hover:bg-gray-100 rounded-lg btn-transition text-gray-400 hover:text-gray-600 flex-shrink-0">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="p-6 space-y-6">
+        <div>
+          <h4 class="text-sm font-semibold text-kpmg-dark-gray uppercase tracking-wider mb-2">Status</h4>
+          <div id="panel-status" class="flex items-center gap-2"></div>
+        </div>
+        <div>
+          <h4 class="text-sm font-semibold text-kpmg-dark-gray uppercase tracking-wider mb-2">Description</h4>
+          <p id="panel-description" class="text-sm text-kpmg-medium-gray leading-relaxed"></p>
+        </div>
+        <div id="panel-prereqs-section">
+          <h4 class="text-sm font-semibold text-kpmg-dark-gray uppercase tracking-wider mb-2">Prerequisites</h4>
+          <div id="panel-prereqs" class="space-y-1"></div>
+        </div>
+        <div id="panel-inputs-section" class="hidden">
+          <h4 class="text-xs font-semibold text-kpmg-dark-gray uppercase tracking-wider flex items-center gap-2 mb-2">📥 Inputs & Data</h4>
+          <div id="panel-inputs" class="bg-kpmg-ice/50 rounded-lg p-3 space-y-1"></div>
+        </div>
+        <div id="panel-deliverables-section">
+          <h4 class="text-sm font-semibold text-kpmg-dark-gray uppercase tracking-wider mb-2">Deliverables</h4>
+          <div id="panel-deliverables" class="space-y-1"></div>
+        </div>
+        <div id="panel-live-output" class="hidden">
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-kpmg-blue feed-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+              <h4 class="text-sm font-semibold text-kpmg-blue">Conversation History</h4>
+            </div>
+            <span id="panel-live-msg-count" class="text-xs text-kpmg-medium-gray bg-kpmg-blue/5 px-2 py-0.5 rounded-full">0 messages</span>
+          </div>
+          <div id="panel-live-output-content" class="bg-white border border-kpmg-border-gray rounded-lg max-h-[500px] overflow-y-auto"></div>
+        </div>
+        <div id="panel-result-section" class="hidden">
+          <h4 class="text-sm font-semibold text-kpmg-dark-gray uppercase tracking-wider mb-2">Result Summary</h4>
+          <div id="panel-result" class="bg-gray-50 rounded-lg p-4 text-sm font-mono text-kpmg-dark-gray whitespace-pre-wrap break-words max-h-64 overflow-y-auto border border-gray-200"></div>
+        </div>
+        <div id="panel-error-section" class="hidden">
+          <h4 class="text-sm font-semibold text-kpmg-error uppercase tracking-wider mb-2">Error Details</h4>
+          <div id="panel-error" class="bg-red-50 rounded-lg p-4 text-sm font-mono text-kpmg-error whitespace-pre-wrap break-words max-h-48 overflow-y-auto border border-red-200"></div>
+        </div>
+        <div>
+          <h4 class="text-sm font-semibold text-kpmg-dark-gray uppercase tracking-wider mb-2">Execution History</h4>
+          <div id="panel-runs" class="border border-gray-200 rounded-lg overflow-hidden">
+            <table class="w-full text-sm">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th class="px-4 py-2 text-left text-xs font-semibold text-kpmg-medium-gray uppercase tracking-wider">Run</th>
+                  <th class="px-4 py-2 text-left text-xs font-semibold text-kpmg-medium-gray uppercase tracking-wider">Status</th>
+                  <th class="px-4 py-2 text-left text-xs font-semibold text-kpmg-medium-gray uppercase tracking-wider">Started</th>
+                  <th class="px-4 py-2 text-left text-xs font-semibold text-kpmg-medium-gray uppercase tracking-wider">Duration</th>
+                </tr>
+              </thead>
+              <tbody id="panel-runs-body" class="divide-y divide-gray-100"></tbody>
+            </table>
+            <div id="panel-no-runs" class="hidden p-6 text-center text-sm text-gray-400">No execution history</div>
+          </div>
+        </div>
+        <div id="panel-actions" class="flex items-center gap-3 pt-4 border-t border-gray-100"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Deliverable Viewer Modal -->
+  <div id="deliverable-viewer" class="fixed inset-0 z-[80] hidden">
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeDeliverableViewer()"></div>
+    <div class="absolute inset-4 md:inset-8 lg:inset-12 bg-white rounded-xl shadow-2xl flex flex-col overflow-hidden animate-modal-in">
+      <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200" style="background: linear-gradient(135deg, #1B1F3B 0%, #00338D 100%);">
+        <div class="flex items-center gap-3 min-w-0">
+          <svg class="w-5 h-5 text-white/70 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          <div class="min-w-0">
+            <h3 id="viewer-title" class="text-white font-semibold text-sm truncate">Document</h3>
+            <p id="viewer-asset-id" class="text-white/50 text-xs font-mono truncate"></p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 flex-shrink-0">
+          <a id="viewer-download-link" href="#" download class="btn-transition px-3 py-1.5 bg-white/10 text-white text-xs font-medium rounded-lg hover:bg-white/20 flex items-center gap-1.5">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            Download
+          </a>
+          <button onclick="closeDeliverableViewer()" class="btn-transition p-1.5 text-white/70 hover:text-white hover:bg-white/10 rounded-lg">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+      </div>
+      <div id="viewer-loading" class="flex-1 flex items-center justify-center">
+        <div class="flex flex-col items-center gap-3">
+          <svg class="w-8 h-8 animate-spin-slow text-kpmg-blue" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+          <p class="text-kpmg-medium-gray text-sm">Loading document...</p>
+        </div>
+      </div>
+      <div id="viewer-content" class="flex-1 overflow-y-auto p-6 md:p-8 lg:p-10 hidden">
+        <div id="viewer-body" class="prose-ai max-w-4xl mx-auto"></div>
+      </div>
+      <div id="viewer-error" class="flex-1 flex items-center justify-center hidden">
+        <div class="text-center">
+          <svg class="w-12 h-12 text-kpmg-error mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4.5c-.77-.833-2.694-.833-3.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
+          <p class="text-kpmg-error font-semibold mb-1">Failed to load document</p>
+          <p id="viewer-error-msg" class="text-sm text-kpmg-medium-gray"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Overlay -->
+  <div id="loading-overlay" class="fixed inset-0 z-[70] hidden items-center justify-center" style="background:rgba(255,255,255,0.8)">
+    <div class="flex flex-col items-center gap-3">
+      <svg class="w-10 h-10 animate-spin-slow text-kpmg-blue" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+      <p class="text-kpmg-medium-gray text-sm font-medium">Loading...</p>
+    </div>
+  </div>
+
+
+  <script>
+    // =========================================================================
+    // APPLICATION STATE
+    // =========================================================================
+    const state = {
+      currentView: 'dashboard',
+      engagements: [],
+      currentEngagement: null,
+      stageConfig: [],
+      selectedStage: null,
+      polling: {},
+      elapsedTimers: {},
+      uploadedFiles: [],
+      sidebarOpen: false,
+    };
+
+    // =========================================================================
+    // CONSTANTS
+    // =========================================================================
+    const PHASES = [
+      { key: 'pursuit', label: 'PURSUIT', color: '#00338D', icon: '🎯', stages: ['stage_0'] },
+      { key: 'planning', label: 'PLANNING', color: '#005EB8', icon: '📋', stages: ['stage_1', 'stage_2'] },
+      { key: 'analysis', label: 'ANALYSIS', color: '#0091DA', icon: '🔍', stages: ['stage_3a', 'stage_3b', 'stage_3c', 'stage_3d', 'stage_3e', 'stage_3f', 'stage_3g'] },
+      { key: 'synthesis', label: 'SYNTHESIS', color: '#F2A900', icon: '🔄', stages: ['stage_4', 'stage_5'] },
+      { key: 'delivery', label: 'DELIVERY', color: '#009A44', icon: '📊', stages: ['stage_6', 'stage_7'] },
+      { key: 'closeout', label: 'CLOSEOUT', color: '#6D6E71', icon: '✅', stages: ['stage_8'] },
+    ];
+
+    const DEFAULT_STAGE_CONFIG = [
+      { key: 'stage_0', name: 'Pursuit & Screening', phase: 'pursuit', description: 'Initial target screening, CIM review, and go/no-go assessment.', prerequisites: [], deliverables: ['Target Screening Memo', 'Preliminary Risk Assessment'] },
+      { key: 'stage_1', name: 'Engagement Setup & Scoping', phase: 'planning', description: 'Define engagement scope, team structure, and workstream allocation.', prerequisites: ['stage_0'], deliverables: ['Engagement Letter', 'Scope Document', 'Team Allocation'] },
+      { key: 'stage_2', name: 'Data Request & Collection', phase: 'planning', description: 'Issue information request list (IRL) and set up data room ingestion.', prerequisites: ['stage_1'], deliverables: ['Information Request List', 'Data Room Index', 'Completeness Tracker'] },
+      { key: 'stage_3a', name: 'Quality of Earnings (QoE)', phase: 'analysis', description: 'Analyze reported earnings, identify normalizing adjustments, and determine sustainable EBITDA.', prerequisites: ['stage_2'], deliverables: ['QoE Bridge', 'Adjusted EBITDA Schedule', 'Revenue Analysis'] },
+      { key: 'stage_3b', name: 'Revenue Deep-Dive', phase: 'analysis', description: 'Detailed revenue analysis by segment, customer, product, and geography.', prerequisites: ['stage_2'], deliverables: ['Revenue Decomposition', 'Customer Concentration Analysis', 'Cohort Analysis'] },
+      { key: 'stage_3c', name: 'Working Capital Analysis', phase: 'analysis', description: 'Analyze net working capital trends, seasonality, and peg calculation.', prerequisites: ['stage_2'], deliverables: ['NWC Bridge', 'NWC Peg Calculation', 'Seasonal Adjustments'] },
+      { key: 'stage_3d', name: 'Debt & Debt-Like Items', phase: 'analysis', description: 'Identify and quantify debt, debt-like items, and contingent liabilities.', prerequisites: ['stage_2'], deliverables: ['Debt Schedule', 'Off-Balance Sheet Items', 'Contingent Liability Summary'] },
+      { key: 'stage_3e', name: 'CapEx & Cash Flow', phase: 'analysis', description: 'Analyze capital expenditures, maintenance vs growth CapEx, and free cash flow conversion.', prerequisites: ['stage_2'], deliverables: ['CapEx Analysis', 'FCF Bridge', 'Cash Conversion Analysis'] },
+      { key: 'stage_3f', name: 'Tax & Structuring', phase: 'analysis', description: 'Review tax positions, exposures, net operating losses, and structuring considerations.', prerequisites: ['stage_2'], deliverables: ['Tax Exposure Summary', 'NOL Schedule', 'Structuring Considerations'] },
+      { key: 'stage_3g', name: 'Commercial & Market', phase: 'analysis', description: 'Assess market position, competitive landscape, and commercial sustainability.', prerequisites: ['stage_2'], deliverables: ['Market Assessment', 'Competitive Positioning', 'Commercial Sustainability Report'] },
+      { key: 'stage_4', name: 'Findings Integration', phase: 'synthesis', description: 'Integrate findings across workstreams, reconcile cross-references, and build unified view.', prerequisites: ['stage_3a', 'stage_3b', 'stage_3c', 'stage_3d', 'stage_3e', 'stage_3f', 'stage_3g'], deliverables: ['Integrated Findings Memo', 'Cross-Workstream Reconciliation'] },
+      { key: 'stage_5', name: 'Risk Assessment & Red Flags', phase: 'synthesis', description: 'Compile risk register, categorize findings, and develop red flag summary.', prerequisites: ['stage_4'], deliverables: ['Risk Register', 'Red Flag Summary', 'Key Findings Matrix'] },
+      { key: 'stage_6', name: 'Report Drafting', phase: 'delivery', description: 'Draft FDD report with executive summary, detailed findings, and appendices.', prerequisites: ['stage_5'], deliverables: ['Draft FDD Report', 'Executive Summary', 'Appendices Package'] },
+      { key: 'stage_7', name: 'Management Presentation', phase: 'delivery', description: 'Prepare management presentation deck and talking points for client delivery.', prerequisites: ['stage_6'], deliverables: ['Presentation Deck', 'Talking Points', 'Q&A Preparation'] },
+      { key: 'stage_8', name: 'Engagement Closeout', phase: 'closeout', description: 'Archive workpapers, complete quality review, and close engagement file.', prerequisites: ['stage_7'], deliverables: ['Archived Workpapers', 'Quality Review Checklist', 'Engagement Close Memo'] },
+    ];
+
+    const STAGE_ICONS = {
+      stage_0: '🎯', stage_1: '📁', stage_2: '📥',
+      stage_3a: '💰', stage_3b: '📈', stage_3c: '🔄',
+      stage_3d: '🏦', stage_3e: '💸', stage_3f: '📋',
+      stage_3g: '🌐', stage_4: '🧩', stage_5: '⚠️',
+      stage_6: '📝', stage_7: '📊', stage_8: '✅',
+    };
+
+    // =========================================================================
+    // UTILITY FUNCTIONS
+    // =========================================================================
+    function relativeTime(dateStr) {
+      if (!dateStr) return 'N/A';
+      const date = new Date(dateStr);
+      const now = new Date();
+      const seconds = Math.floor((now - date) / 1000);
+      if (seconds < 5) return 'just now';
+      if (seconds < 60) return seconds + ' seconds ago';
+      const minutes = Math.floor(seconds / 60);
+      if (minutes < 60) return minutes + (minutes === 1 ? ' minute ago' : ' minutes ago');
+      const hours = Math.floor(minutes / 60);
+      if (hours < 24) return hours + (hours === 1 ? ' hour ago' : ' hours ago');
+      const days = Math.floor(hours / 24);
+      if (days < 30) return days + (days === 1 ? ' day ago' : ' days ago');
+      const months = Math.floor(days / 30);
+      return months + (months === 1 ? ' month ago' : ' months ago');
+    }
+
+    function formatDate(dateStr) {
+      if (!dateStr) return 'N/A';
+      return new Date(dateStr).toLocaleDateString('en-US', {
+        year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+      });
+    }
+
+    function formatDuration(ms) {
+      if (!ms || ms < 0) return '0s';
+      const totalSec = Math.floor(ms / 1000);
+      if (totalSec < 60) return totalSec + 's';
+      const min = Math.floor(totalSec / 60);
+      const sec = totalSec % 60;
+      if (min < 60) return min + 'm ' + sec + 's';
+      const hr = Math.floor(min / 60);
+      const remMin = min % 60;
+      return hr + 'h ' + remMin + 'm';
+    }
+
+    function escapeAttr(str) {
+      if (!str) return '';
+      return String(str).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function getVal(obj, snakeKey, camelKey) {
+      return obj[snakeKey] || obj[camelKey] || '';
+    }
+
+    function renderMarkdown(text) {
+      if (!text) return '';
+      try {
+        if (typeof marked !== 'undefined' && marked.parse) {
+          return marked.parse(text, { breaks: true, gfm: true });
+        }
+      } catch(e) { console.warn('Markdown parse error', e); }
+      return '<pre>' + escapeAttr(text) + '</pre>';
+    }
+
+    function sanitizeAthenaHtml(html) {
+      // Convert Athena's escaped custom tags to standard HTML
+      return html
+        .replace(/&lt;bold&gt;/g, '<strong>')
+        .replace(/&lt;\/bold&gt;/g, '</strong>')
+        .replace(/&lt;italic&gt;/g, '<em>')
+        .replace(/&lt;\/italic&gt;/g, '</em>')
+        .replace(/&lt;underline&gt;/g, '<u>')
+        .replace(/&lt;\/underline&gt;/g, '</u>')
+        .replace(/&lt;strikethrough&gt;/g, '<del>')
+        .replace(/&lt;\/strikethrough&gt;/g, '</del>')
+        // Remove Athena data-id attributes for cleaner display
+        .replace(/ data-id="[^"]*"/g, '')
+        // Style tableWrapper divs
+        .replace(/class="tableWrapper"/g, 'class="tableWrapper" style="overflow-x:auto;margin:0.5rem 0;"');
+    }
+
+    function truncateText(text, maxLen) {
+      if (!text) return '';
+      if (text.length <= maxLen) return text;
+      return text.substring(0, maxLen) + '...';
+    }
+
+    // =========================================================================
+    // TOAST NOTIFICATION SYSTEM
+    // =========================================================================
+    function showToast(message, type) {
+      type = type || 'info';
+      var container = document.getElementById('toast-container');
+      var toast = document.createElement('div');
+      var colors = {
+        success: 'bg-kpmg-success',
+        error: 'bg-kpmg-error',
+        info: 'bg-kpmg-blue',
+        warning: 'bg-kpmg-warning',
+      };
+      var icons = {
+        success: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>',
+        error: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>',
+        info: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>',
+        warning: '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>',
+      };
+      toast.className = 'pointer-events-auto animate-toast-in ' + (colors[type] || colors.info) + ' text-white px-4 py-3 rounded-lg shadow-lg flex items-center gap-3 text-sm font-medium';
+      var msgSpan = document.createElement('span');
+      msgSpan.className = 'flex-1';
+      msgSpan.textContent = message;
+      toast.innerHTML = '<span class="flex-shrink-0">' + (icons[type] || icons.info) + '</span>';
+      toast.appendChild(msgSpan);
+      var closeBtn = document.createElement('button');
+      closeBtn.className = 'flex-shrink-0 p-1 hover:bg-white/20 rounded';
+      closeBtn.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>';
+      closeBtn.onclick = function() { toast.remove(); };
+      toast.appendChild(closeBtn);
+      container.appendChild(toast);
+      setTimeout(function() {
+        toast.classList.remove('animate-toast-in');
+        toast.classList.add('animate-toast-out');
+        setTimeout(function() { toast.remove(); }, 300);
+      }, 5000);
+    }
+
+    // =========================================================================
+    // SIDEBAR
+    // =========================================================================
+    function toggleSidebar() {
+      var sidebar = document.getElementById('sidebar');
+      var overlay = document.getElementById('sidebar-overlay');
+      state.sidebarOpen = !state.sidebarOpen;
+      if (state.sidebarOpen) {
+        sidebar.classList.remove('-translate-x-full');
+        overlay.classList.remove('hidden');
+      } else {
+        sidebar.classList.add('-translate-x-full');
+        overlay.classList.add('hidden');
+      }
+    }
+
+    function closeSidebarMobile() {
+      if (state.sidebarOpen) toggleSidebar();
+    }
+
+    function updateNavHighlight(view) {
+      document.querySelectorAll('[data-nav]').forEach(function(el) {
+        el.classList.remove('bg-kpmg-sidebar-active', 'text-kpmg-sidebar-text-active', 'font-semibold');
+        el.classList.add('text-kpmg-sidebar-text');
+      });
+      var navKey = view === 'engagement' ? 'engagements-list' : view;
+      var active = document.querySelector('[data-nav="' + navKey + '"]');
+      if (active) {
+        active.classList.add('bg-kpmg-sidebar-active', 'text-kpmg-sidebar-text-active', 'font-semibold');
+        active.classList.remove('text-kpmg-sidebar-text');
+      }
+    }
+
+    // =========================================================================
+    // NAVIGATION
+    // =========================================================================
+    function navigateTo(view, data) {
+      if (state.currentView === 'engagement' && view !== 'engagement') {
+        cleanupPolling();
+        cleanupElapsedTimers();
+      }
+      state.currentView = view;
+      document.querySelectorAll('.view-container').forEach(function(el) { el.classList.add('hidden'); });
+      closeSidebarMobile();
+      updateNavHighlight(view);
+
+      if (view === 'dashboard') {
+        document.getElementById('view-dashboard').classList.remove('hidden');
+        loadDashboard();
+      } else if (view === 'engagements-list') {
+        document.getElementById('view-engagements-list').classList.remove('hidden');
+        loadEngagementsList();
+      } else if (view === 'engagement') {
+        document.getElementById('view-engagement').classList.remove('hidden');
+        if (data && data.id) loadEngagementDetail(data.id);
+      } else if (view === 'data-room') {
+        document.getElementById('view-data-room').classList.remove('hidden');
+        loadDataRoom();
+      }
+    }
+
+    // =========================================================================
+    // API FUNCTIONS
+    // =========================================================================
+    function apiFetch(url, options) {
+      options = options || {};
+      var headers = Object.assign({ 'Content-Type': 'application/json' }, options.headers || {});
+      var fetchOpts = Object.assign({}, options, { headers: headers });
+      return fetch(url, fetchOpts).then(function(resp) {
+        if (!resp.ok) {
+          return resp.json().catch(function() { return { error: resp.statusText }; }).then(function(errData) {
+            throw new Error(errData.error || errData.message || 'HTTP ' + resp.status);
+          });
+        }
+        return resp.json();
+      }).catch(function(err) {
+        if (err.name === 'TypeError' && err.message.indexOf('fetch') !== -1) {
+          throw new Error('Network error: Unable to connect to the server');
+        }
+        throw err;
+      });
+    }
+
+    function fetchEngagements() { return apiFetch('/api/engagements'); }
+    function createEngagement(data) { return apiFetch('/api/engagements', { method: 'POST', body: JSON.stringify(data) }); }
+    function fetchEngagement(id) {
+      return apiFetch('/api/engagements/' + encodeURIComponent(id)).then(function(eng) {
+        if (eng && eng.stages && Array.isArray(eng.stages)) {
+          var stagesMap = {};
+          eng.stages.forEach(function(s) {
+            var key = s.stage_key || s.key;
+            var flat = Object.assign({}, s);
+            // Flatten latest_run fields into the stage object for easy access
+            if (s.latest_run) {
+              flat.thread_id = s.latest_run.thread_id || flat.thread_id;
+              flat.started_at = s.latest_run.started_at || flat.started_at;
+              flat.completed_at = s.latest_run.completed_at || flat.completed_at;
+              flat.result = s.latest_run.result_summary || flat.result;
+              flat.result_summary = s.latest_run.result_summary || flat.result_summary;
+              flat.error = s.latest_run.error_message || flat.error;
+              flat.error_message = s.latest_run.error_message || flat.error_message;
+              flat.deliverable_ids = s.latest_run.deliverable_ids || flat.deliverable_ids;
+            }
+            stagesMap[key] = flat;
+          });
+          eng.stages = stagesMap;
+        }
+        return eng;
+      });
+    }
+    function updateEngagement(id, data) { return apiFetch('/api/engagements/' + encodeURIComponent(id), { method: 'PATCH', body: JSON.stringify(data) }); }
+    function executeStage(engId, stageKey) { return apiFetch('/api/engagements/' + encodeURIComponent(engId) + '/execute/' + encodeURIComponent(stageKey), { method: 'POST' }); }
+    function pollThread(threadId) { return apiFetch('/api/threads/' + encodeURIComponent(threadId)); }
+    function stopThread(threadId) { return apiFetch('/api/threads/' + encodeURIComponent(threadId) + '/stop', { method: 'POST' }); }
+    function fetchStageRuns(engId, stageKey) { return apiFetch('/api/engagements/' + encodeURIComponent(engId) + '/runs/' + encodeURIComponent(stageKey)); }
+    function fetchStageConfig() { return apiFetch('/api/config/stages'); }
+
+    // =========================================================================
+    // STAGE CONFIG
+    // =========================================================================
+    function normalizeStageConfig(config) {
+      return config.map(function(s) {
+        return {
+          key: s.stage_key || s.key,
+          name: s.stage_name || s.name,
+          number: s.stage_number || s.number || '',
+          phase: s.phase,
+          description: s.stage_description || s.description || '',
+          aop_asset_id: s.aop_asset_id || '',
+          sort_order: s.sort_order != null ? s.sort_order : 0,
+          prerequisites: STAGE_DEPENDENCIES[s.stage_key || s.key] || s.prerequisites || [],
+          deliverables: s.deliverables || []
+        };
+      });
+    }
+
+    var STAGE_DEPENDENCIES = {
+      stage_0: [],
+      stage_1: ['stage_0'],
+      stage_2: ['stage_1'],
+      stage_3a: ['stage_2'],
+      stage_3b: ['stage_2'],
+      stage_3c: ['stage_2'],
+      stage_3d: ['stage_2'],
+      stage_3e: ['stage_2'],
+      stage_3f: ['stage_2'],
+      stage_3g: ['stage_2'],
+      stage_4: ['stage_3a'],
+      stage_5: ['stage_4'],
+      stage_6: ['stage_5'],
+      stage_7: ['stage_6'],
+      stage_8: ['stage_7']
+    };
+
+    function loadStageConfig() {
+      return fetchStageConfig().then(function(config) {
+        if (config && Array.isArray(config) && config.length > 0) {
+          state.stageConfig = normalizeStageConfig(config);
+        } else {
+          state.stageConfig = DEFAULT_STAGE_CONFIG;
+        }
+      }).catch(function() {
+        state.stageConfig = DEFAULT_STAGE_CONFIG;
+      });
+    }
+
+    function getStageConfig(key) {
+      var found = state.stageConfig.find(function(s) { return s.key === key; });
+      if (!found) found = DEFAULT_STAGE_CONFIG.find(function(s) { return s.key === key; });
+      return found || { key: key, name: key, phase: 'unknown', description: '', prerequisites: [], deliverables: [] };
+    }
+
+    // =========================================================================
+    // DASHBOARD
+    // =========================================================================
+    function loadDashboard() {
+      fetchEngagements().then(function(data) {
+        state.engagements = Array.isArray(data) ? data : (data.engagements || []);
+      }).catch(function(err) {
+        showToast('Failed to load engagements: ' + err.message, 'error');
+        state.engagements = [];
+      }).finally(function() {
+        renderDashboard();
+      });
+    }
+
+    function renderDashboard() {
+      var engs = state.engagements;
+      var total = engs.length;
+      var active = engs.filter(function(e) { return e.status === 'active' || e.status === 'in_progress'; }).length;
+      var completed = engs.filter(function(e) { return e.status === 'completed' || e.status === 'delivered'; }).length;
+      var inProgress = engs.filter(function(e) {
+        if (!e.stages) return false;
+        return Object.values(e.stages).some(function(s) { return s.status === 'running'; });
+      }).length;
+
+      document.getElementById('stat-total').textContent = total;
+      document.getElementById('stat-active').textContent = active;
+      document.getElementById('stat-completed').textContent = completed;
+      document.getElementById('stat-progress').textContent = inProgress;
+
+      var listEl = document.getElementById('recent-engagements-list');
+      var noMsg = document.getElementById('no-engagements-msg');
+
+      if (engs.length === 0) {
+        listEl.innerHTML = '';
+        noMsg.classList.remove('hidden');
+        return;
+      }
+      noMsg.classList.add('hidden');
+      var recent = engs.slice().sort(function(a, b) {
+        return new Date(b.created_at || b.createdAt || 0) - new Date(a.created_at || a.createdAt || 0);
+      }).slice(0, 10);
+
+      listEl.innerHTML = recent.map(function(eng) {
+        var statusColor = getStatusColor(eng.status);
+        var progress = calculateProgress(eng);
+        var created = eng.created_at || eng.createdAt;
+        var id = eng.engagement_id || eng.id || eng._id;
+        var name = escapeAttr(getVal(eng, 'target_company', 'targetCompany') || 'Untitled');
+        var client = escapeAttr(getVal(eng, 'client_name', 'clientName'));
+        var engType = escapeAttr(getVal(eng, 'engagement_type', 'engagementType'));
+        var dealType = escapeAttr(getVal(eng, 'deal_type', 'dealType'));
+        return '<div class="px-6 py-4 hover:bg-gray-50 cursor-pointer transition-colors flex items-center gap-4" onclick="navigateTo(\'engagement\', { id: \'' + escapeAttr(id) + '\' })">' +
+          '<div class="flex-1 min-w-0">' +
+            '<div class="flex items-center gap-2 mb-1">' +
+              '<p class="font-semibold text-kpmg-dark-gray truncate">' + name + '</p>' +
+              '<span class="px-2 py-0.5 rounded-full text-xs font-semibold ' + statusColor.bg + ' ' + statusColor.text + '">' + escapeAttr(eng.status || 'draft') + '</span>' +
+            '</div>' +
+            '<p class="text-sm text-kpmg-medium-gray truncate">' + client + ' &middot; ' + engType + ' &middot; ' + dealType + '</p>' +
+          '</div>' +
+          '<div class="hidden sm:flex flex-col items-end gap-1 flex-shrink-0">' +
+            '<div class="w-24 h-1.5 bg-gray-200 rounded-full overflow-hidden"><div class="h-full bg-kpmg-blue rounded-full" style="width:' + progress + '%"></div></div>' +
+            '<p class="text-xs text-kpmg-medium-gray">' + progress + '% complete</p>' +
+          '</div>' +
+          '<div class="hidden md:block text-right flex-shrink-0"><p class="text-xs text-kpmg-medium-gray">' + relativeTime(created) + '</p></div>' +
+          '<svg class="w-5 h-5 text-gray-300 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>' +
+        '</div>';
+      }).join('');
+    }
+
+    function getStatusColor(status) {
+      var map = {
+        draft: { bg: 'bg-gray-100', text: 'text-gray-600' },
+        active: { bg: 'bg-blue-100', text: 'text-blue-700' },
+        in_progress: { bg: 'bg-blue-100', text: 'text-blue-700' },
+        completed: { bg: 'bg-green-100', text: 'text-green-700' },
+        delivered: { bg: 'bg-green-100', text: 'text-green-700' },
+        cancelled: { bg: 'bg-red-100', text: 'text-red-700' },
+      };
+      return map[status] || map.draft;
+    }
+
+    function calculateProgress(eng) {
+      if (eng.progress_pct != null) return eng.progress_pct;
+      if (!eng || !eng.stages) return 0;
+      var stageKeys = Object.keys(eng.stages);
+      if (stageKeys.length === 0) return 0;
+      var completedCount = stageKeys.filter(function(k) { return eng.stages[k].status === 'completed'; }).length;
+      var totalStages = PHASES.reduce(function(sum, p) { return sum + p.stages.length; }, 0);
+      return Math.round((completedCount / totalStages) * 100);
+    }
+
+    // =========================================================================
+    // ENGAGEMENTS LIST
+    // =========================================================================
+    function loadEngagementsList() {
+      fetchEngagements().then(function(data) {
+        state.engagements = Array.isArray(data) ? data : (data.engagements || []);
+      }).catch(function(err) {
+        showToast('Failed to load engagements: ' + err.message, 'error');
+        state.engagements = [];
+      }).finally(function() {
+        renderEngagementsList();
+      });
+    }
+
+    function renderEngagementsList() {
+      var grid = document.getElementById('engagements-grid');
+      var noMsg = document.getElementById('no-engagements-grid-msg');
+      if (state.engagements.length === 0) {
+        grid.innerHTML = '';
+        noMsg.classList.remove('hidden');
+        return;
+      }
+      noMsg.classList.add('hidden');
+      var sorted = state.engagements.slice().sort(function(a, b) {
+        return new Date(b.created_at || b.createdAt || 0) - new Date(a.created_at || a.createdAt || 0);
+      });
+      grid.innerHTML = sorted.map(function(eng) {
+        var statusColor = getStatusColor(eng.status);
+        var progress = calculateProgress(eng);
+        var created = eng.created_at || eng.createdAt;
+        var id = eng.engagement_id || eng.id || eng._id;
+        var name = escapeAttr(getVal(eng, 'target_company', 'targetCompany') || 'Untitled');
+        var client = escapeAttr(getVal(eng, 'client_name', 'clientName'));
+        var engType = escapeAttr(getVal(eng, 'engagement_type', 'engagementType') || 'N/A');
+        var industry = escapeAttr(eng.industry || 'N/A');
+        var partner = escapeAttr(getVal(eng, 'engagement_partner', 'engagementPartner') || 'Unassigned');
+        return '<div class="bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-all cursor-pointer overflow-hidden" onclick="navigateTo(\'engagement\', { id: \'' + escapeAttr(id) + '\' })">' +
+          '<div class="p-5">' +
+            '<div class="flex items-start justify-between mb-3">' +
+              '<div class="min-w-0 flex-1"><h4 class="font-bold text-kpmg-dark-gray truncate">' + name + '</h4><p class="text-sm text-kpmg-medium-gray truncate mt-0.5">' + client + '</p></div>' +
+              '<span class="ml-2 px-2 py-0.5 rounded-full text-xs font-semibold flex-shrink-0 ' + statusColor.bg + ' ' + statusColor.text + '">' + escapeAttr(eng.status || 'draft') + '</span>' +
+            '</div>' +
+            '<div class="flex items-center gap-3 text-xs text-kpmg-medium-gray mb-4"><span>' + engType + '</span><span class="w-1 h-1 bg-gray-300 rounded-full"></span><span>' + industry + '</span></div>' +
+            '<div class="mb-2 flex items-center justify-between text-xs"><span class="text-kpmg-medium-gray">Progress</span><span class="font-semibold text-kpmg-blue">' + progress + '%</span></div>' +
+            '<div class="w-full h-1.5 bg-gray-200 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-kpmg-blue to-kpmg-light rounded-full transition-all" style="width:' + progress + '%"></div></div>' +
+          '</div>' +
+          '<div class="px-5 py-3 bg-gray-50 border-t border-gray-100 flex items-center justify-between text-xs text-kpmg-medium-gray"><span>' + partner + '</span><span>' + relativeTime(created) + '</span></div>' +
+        '</div>';
+      }).join('');
+    }
+
+    // =========================================================================
+    // NEW ENGAGEMENT MODAL
+    // =========================================================================
+    function openNewEngagementModal() {
+      closeSidebarMobile();
+      document.getElementById('new-engagement-modal').classList.remove('hidden');
+      document.getElementById('new-engagement-form').reset();
+      document.body.style.overflow = 'hidden';
+      // Scroll modal to top after DOM update
+      setTimeout(function() {
+        var scrollables = document.querySelectorAll('#new-engagement-modal .overflow-y-auto, #new-engagement-modal [class*="overflow"]');
+        scrollables.forEach(function(el) { el.scrollTop = 0; });
+      }, 0);
+    }
+
+    function closeNewEngagementModal() {
+      document.getElementById('new-engagement-modal').classList.add('hidden');
+      document.body.style.overflow = '';
+    }
+
+    function handleCreateEngagement(event) {
+      event.preventDefault();
+      var form = event.target;
+      var btn = document.getElementById('btn-create-engagement');
+      var spinner = document.getElementById('create-spinner');
+
+      var data = {
+        target_company: form.target_company.value.trim(),
+        client_name: form.client_name.value.trim(),
+        engagement_type: form.engagement_type.value,
+        deal_type: form.deal_type.value,
+        industry: form.industry.value.trim(),
+        estimated_ev: form.enterprise_value.value.trim(),
+        deal_timeline_weeks: form.deal_timeline.value ? parseInt(form.deal_timeline.value) : 4,
+        engagement_partner: form.engagement_partner.value.trim(),
+      };
+
+      if (!data.target_company || !data.client_name) {
+        showToast('Please fill in all required fields', 'warning');
+        return;
+      }
+
+      btn.disabled = true;
+      spinner.classList.remove('hidden');
+
+      createEngagement(data).then(function(result) {
+        showToast('Engagement created successfully', 'success');
+        closeNewEngagementModal();
+        var engId = result.engagement_id || result.id || result._id || (result.engagement && (result.engagement.engagement_id || result.engagement.id || result.engagement._id));
+        if (engId) {
+          navigateTo('engagement', { id: engId });
+        } else {
+          navigateTo('dashboard');
+        }
+      }).catch(function(err) {
+        showToast('Failed to create engagement: ' + err.message, 'error');
+      }).finally(function() {
+        btn.disabled = false;
+        spinner.classList.add('hidden');
+      });
+    }
+
+    // =========================================================================
+    // ENGAGEMENT DETAIL
+    // =========================================================================
+    function loadEngagementDetail(id) {
+      showLoadingOverlay(true);
+      fetchEngagement(id).then(function(eng) {
+        state.currentEngagement = eng;
+        renderEngagementDetail();
+        restartPollingForRunningStages();
+      }).catch(function(err) {
+        showToast('Failed to load engagement: ' + err.message, 'error');
+        navigateTo('dashboard');
+      }).finally(function() {
+        showLoadingOverlay(false);
+      });
+    }
+
+    function showLoadingOverlay(show) {
+      var overlay = document.getElementById('loading-overlay');
+      if (show) {
+        overlay.classList.remove('hidden');
+        overlay.style.display = 'flex';
+      } else {
+        overlay.classList.add('hidden');
+        overlay.style.display = '';
+      }
+    }
+
+    function renderEngagementDetail() {
+      var eng = state.currentEngagement;
+      if (!eng) return;
+
+      function safeSet(id, val) {
+        var el = document.getElementById(id);
+        if (el) el.textContent = val || 'N/A';
+      }
+
+      safeSet('eng-title', getVal(eng, 'target_company', 'targetCompany'));
+      safeSet('eng-client', getVal(eng, 'client_name', 'clientName'));
+      safeSet('eng-type', getVal(eng, 'engagement_type', 'engagementType'));
+      safeSet('eng-deal-type', getVal(eng, 'deal_type', 'dealType'));
+      safeSet('eng-industry', eng.industry);
+      safeSet('eng-ev', eng.estimated_ev || getVal(eng, 'enterprise_value', 'enterpriseValue'));
+      var timeline = eng.deal_timeline_weeks || getVal(eng, 'deal_timeline', 'dealTimeline');
+      safeSet('eng-timeline', timeline ? timeline + ' weeks' : 'N/A');
+      safeSet('eng-partner', getVal(eng, 'engagement_partner', 'engagementPartner'));
+      safeSet('eng-created', formatDate(eng.created_at || eng.createdAt));
+
+      var badge = document.getElementById('eng-status-badge');
+      var statusColor = getStatusColor(eng.status);
+      badge.className = 'px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider ' + statusColor.bg + ' ' + statusColor.text;
+      badge.textContent = eng.status || 'draft';
+
+      var progress = calculateProgress(eng);
+      document.getElementById('eng-progress-text').textContent = progress + '%';
+      document.getElementById('eng-progress-bar').style.width = progress + '%';
+
+      renderPipelineStages();
+    }
+
+    function getStageStatus(stageKey) {
+      var eng = state.currentEngagement;
+      if (!eng || !eng.stages || !eng.stages[stageKey]) return 'locked';
+      return eng.stages[stageKey].status || 'locked';
+    }
+
+    function getStageData(stageKey) {
+      var eng = state.currentEngagement;
+      if (!eng || !eng.stages) return null;
+      return eng.stages[stageKey] || null;
+    }
+
+    function isStageReady(stageKey) {
+      var config = getStageConfig(stageKey);
+      if (!config.prerequisites || config.prerequisites.length === 0) return true;
+      return config.prerequisites.every(function(prereq) { return getStageStatus(prereq) === 'completed'; });
+    }
+
+    function deriveStageVisualStatus(stageKey) {
+      var stageData = getStageData(stageKey);
+      if (stageData) {
+        var status = stageData.status;
+        if (status === 'completed' || status === 'running' || status === 'failed') return status;
+        if (status === 'ready') return 'ready';
+      }
+      if (isStageReady(stageKey)) return 'ready';
+      return 'locked';
+    }
+
+    function renderPipelineStages() {
+      var container = document.getElementById('pipeline-stages');
+      container.innerHTML = '';
+
+      PHASES.forEach(function(phase) {
+        var section = document.createElement('div');
+        var isAnalysis = phase.key === 'analysis';
+
+        // Phase header
+        var headerDiv = document.createElement('div');
+        headerDiv.className = 'flex items-center gap-3 mb-4';
+        headerDiv.innerHTML = '<span class="text-2xl">' + phase.icon + '</span>' +
+          '<div><h3 class="text-lg font-bold" style="color:' + phase.color + '">' + phase.label + '</h3>' +
+          '<p class="text-xs text-kpmg-medium-gray uppercase tracking-wider">' + phase.stages.length + ' stage' + (phase.stages.length > 1 ? 's' : '') + '</p></div>' +
+          '<div class="flex-1 h-px" style="background:' + phase.color + '20"></div>';
+        section.appendChild(headerDiv);
+
+        // Stage grid
+        var gridDiv = document.createElement('div');
+        gridDiv.className = isAnalysis ? 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4' : 'grid grid-cols-1 md:grid-cols-2 gap-4';
+
+        phase.stages.forEach(function(stageKey) {
+          var config = getStageConfig(stageKey);
+          var visualStatus = deriveStageVisualStatus(stageKey);
+          var stageData = getStageData(stageKey);
+          var card = createStageCard(stageKey, config, visualStatus, stageData);
+          gridDiv.appendChild(card);
+        });
+
+        section.appendChild(gridDiv);
+        container.appendChild(section);
+      });
+    }
+
+    function createStageCard(stageKey, config, status, stageData) {
+      var card = document.createElement('div');
+      card.className = 'stage-card rounded-xl border shadow-sm cursor-pointer overflow-hidden';
+      var icon = STAGE_ICONS[stageKey] || '📄';
+      var statusIndicator = '';
+      var actionBtn = '';
+      var bgClass = '';
+      var extraBorder = '';
+      var borderColor = '';
+
+      switch (status) {
+        case 'locked':
+          bgClass = 'bg-gray-100';
+          extraBorder = 'border-gray-300';
+          statusIndicator = '<span class="text-lg opacity-50">🔒</span>';
+          break;
+        case 'ready':
+          bgClass = 'bg-white';
+          borderColor = '#005EB8';
+          var inputGaps = getStageInputGaps(stageKey);
+          var gapBadge = '';
+          if (inputGaps.requiredUploads > 0) {
+            gapBadge = '<span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-semibold bg-amber-100 text-amber-700">' + inputGaps.requiredUploads + ' input' + (inputGaps.requiredUploads > 1 ? 's' : '') + ' needed</span>';
+          }
+          statusIndicator = '<div class="flex items-center gap-1.5 flex-wrap"><span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">Ready</span>' + gapBadge + '</div>';
+          actionBtn = '<button onclick="event.stopPropagation(); handleExecuteStage(\'' + escapeAttr(stageKey) + '\')" class="btn-transition px-3 py-1.5 bg-kpmg-medium text-white text-xs font-semibold rounded-lg hover:bg-kpmg-blue shadow-sm">Execute</button>';
+          break;
+        case 'running':
+          bgClass = 'bg-blue-50';
+          borderColor = '#F2A900';
+          var elapsed = stageData && (stageData.started_at || stageData.startedAt) ? formatDuration(Date.now() - new Date(stageData.started_at || stageData.startedAt).getTime()) : '0s';
+          var msgCount = (stageData && stageData._live_msg_count) || 0;
+          var liveSnippet = (stageData && stageData._live_snippet) || '';
+          statusIndicator = '<div class="flex items-center gap-2">' +
+            '<span class="w-2.5 h-2.5 bg-kpmg-warning rounded-full animate-pulse-dot"></span>' +
+            '<span class="text-xs font-semibold text-kpmg-warning">Running</span>' +
+            '<span class="text-xs text-kpmg-medium-gray font-mono" id="elapsed-' + escapeAttr(stageKey) + '">' + elapsed + '</span>' +
+            (msgCount > 0 ? '<span class="text-xs bg-kpmg-blue/10 text-kpmg-blue px-1.5 py-0.5 rounded font-medium">' + msgCount + ' msg' + (msgCount > 1 ? 's' : '') + '</span>' : '') +
+            '</div>';
+          actionBtn = '<button onclick="event.stopPropagation(); handleCancelStage(\'' + escapeAttr(stageKey) + '\')" class="btn-transition px-3 py-1.5 bg-kpmg-error text-white text-xs font-semibold rounded-lg hover:bg-red-700 shadow-sm">Cancel</button>';
+          break;
+        case 'completed':
+          bgClass = 'bg-white';
+          borderColor = '#009A44';
+          var completedAt = stageData && (stageData.completed_at || stageData.completedAt) ? relativeTime(stageData.completed_at || stageData.completedAt) : '';
+          var delivCount = getDeliverableCount(stageKey);
+          statusIndicator = '<div class="flex items-center gap-2 flex-wrap">' +
+            '<span class="w-5 h-5 rounded-full bg-kpmg-success flex items-center justify-center"><svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg></span>' +
+            '<span class="text-xs font-semibold text-kpmg-success">Completed</span>' +
+            (completedAt ? '<span class="text-xs text-kpmg-medium-gray">' + completedAt + '</span>' : '') +
+            (delivCount > 0 ? '<span class="text-xs bg-kpmg-blue/10 text-kpmg-blue px-1.5 py-0.5 rounded font-semibold flex items-center gap-1"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>' + delivCount + ' file' + (delivCount > 1 ? 's' : '') + '</span>' : '') +
+            '</div>';
+          actionBtn = '<button onclick="event.stopPropagation(); openStagePanel(\'' + escapeAttr(stageKey) + '\')" class="btn-transition px-3 py-1.5 bg-kpmg-success text-white text-xs font-semibold rounded-lg hover:bg-green-700 shadow-sm">View Results</button>' +
+            '<button onclick="event.stopPropagation(); handleExecuteStage(\'' + escapeAttr(stageKey) + '\')" class="btn-transition px-3 py-1.5 bg-white text-kpmg-medium-gray text-xs font-semibold rounded-lg hover:bg-gray-100 border border-gray-300">Re-run</button>';
+          break;
+        case 'failed':
+          bgClass = 'bg-white';
+          borderColor = '#BC204B';
+          statusIndicator = '<div class="flex items-center gap-2">' +
+            '<span class="w-5 h-5 rounded-full bg-kpmg-error flex items-center justify-center"><svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"/></svg></span>' +
+            '<span class="text-xs font-semibold text-kpmg-error">Failed</span>' +
+            '</div>';
+          actionBtn = '<button onclick="event.stopPropagation(); handleExecuteStage(\'' + escapeAttr(stageKey) + '\')" class="btn-transition px-3 py-1.5 bg-kpmg-warning text-white text-xs font-semibold rounded-lg hover:bg-yellow-600 shadow-sm">Retry</button>' +
+            '<button onclick="event.stopPropagation(); openStagePanel(\'' + escapeAttr(stageKey) + '\')" class="btn-transition px-3 py-1.5 bg-white text-kpmg-error text-xs font-semibold rounded-lg hover:bg-red-50 border border-red-300">View Error</button>';
+          break;
+      }
+
+      card.className += ' ' + bgClass + ' ' + extraBorder;
+      if (borderColor) {
+        card.style.borderLeftWidth = '4px';
+        card.style.borderLeftColor = borderColor;
+      }
+
+      var opacity = status === 'locked' ? 'opacity-50' : '';
+      var errorHtml = '';
+      if (status === 'failed' && stageData && stageData.error) {
+        errorHtml = '<p class="text-xs text-kpmg-error bg-red-50 px-2 py-1 rounded mb-3 truncate">' + escapeAttr(String(stageData.error).substring(0, 100)) + '</p>';
+      }
+
+      var feedHtml = '';
+      if (status === 'running' && stageData && stageData._live_snippet) {
+        feedHtml = '<div class="mt-3 pt-3 border-t border-blue-200">' +
+          '<div class="flex items-center gap-1.5 mb-1.5">' +
+            '<svg class="w-3.5 h-3.5 text-kpmg-blue feed-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>' +
+            '<span class="text-[11px] font-semibold text-kpmg-blue uppercase tracking-wider">AI Working</span>' +
+          '</div>' +
+          '<div class="text-xs text-kpmg-dark-gray leading-relaxed" id="live-feed-' + escapeAttr(stageKey) + '" style="display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;">' + escapeAttr(stageData._live_snippet) + '</div>' +
+        '</div>';
+      }
+      if (status === 'completed' && stageData && (stageData.result || stageData.result_summary)) {
+        var resultText = stageData.result || stageData.result_summary || '';
+        var previewText = truncateText(resultText.replace(/[#*_`\[\]]/g, '').replace(/\n+/g, ' '), 120);
+        feedHtml = '<div class="mt-3 pt-3 border-t border-green-200">' +
+          '<div class="flex items-center gap-1.5 mb-1.5">' +
+            '<svg class="w-3.5 h-3.5 text-kpmg-success" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4"/></svg>' +
+            '<span class="text-[11px] font-semibold text-kpmg-success uppercase tracking-wider">Output Preview</span>' +
+          '</div>' +
+          '<p class="text-xs text-kpmg-dark-gray leading-relaxed" style="display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">' + escapeAttr(previewText) + '</p>' +
+        '</div>';
+      }
+
+      card.innerHTML = '<div class="p-4 ' + opacity + '">' +
+        '<div class="flex items-start justify-between mb-2">' +
+          '<div class="flex items-center gap-2 min-w-0">' +
+            '<span class="text-lg flex-shrink-0">' + icon + '</span>' +
+            '<div class="min-w-0"><h4 class="font-semibold text-sm text-kpmg-dark-gray truncate">' + escapeAttr(config.name) + '</h4>' +
+            '<p class="text-xs font-mono text-kpmg-medium-gray">' + escapeAttr(stageKey) + '</p></div>' +
+          '</div>' +
+          statusIndicator +
+        '</div>' +
+        '<p class="text-xs text-kpmg-medium-gray leading-relaxed mb-3" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">' + escapeAttr(config.description) + '</p>' +
+        errorHtml +
+        '<div class="flex items-center gap-2">' + actionBtn + '</div>' +
+        feedHtml +
+      '</div>';
+
+      card.addEventListener('click', function() { openStagePanel(stageKey); });
+
+      if (status === 'running' && stageData) {
+        startElapsedTimer(stageKey, stageData.started_at || stageData.startedAt);
+      }
+
+      return card;
+    }
+
+    // =========================================================================
+    // ELAPSED TIMER
+    // =========================================================================
+    function startElapsedTimer(stageKey, startedAt) {
+      if (state.elapsedTimers[stageKey]) clearInterval(state.elapsedTimers[stageKey]);
+      if (!startedAt) return;
+      var startTime = new Date(startedAt).getTime();
+      state.elapsedTimers[stageKey] = setInterval(function() {
+        var el = document.getElementById('elapsed-' + stageKey);
+        if (el) {
+          el.textContent = formatDuration(Date.now() - startTime);
+        } else {
+          clearInterval(state.elapsedTimers[stageKey]);
+          delete state.elapsedTimers[stageKey];
+        }
+      }, 1000);
+    }
+
+    function cleanupElapsedTimers() {
+      Object.keys(state.elapsedTimers).forEach(function(key) {
+        clearInterval(state.elapsedTimers[key]);
+      });
+      state.elapsedTimers = {};
+    }
+
+    // =========================================================================
+    // STAGE EXECUTION & POLLING
+    // =========================================================================
+    function handleExecuteStage(stageKey) {
+      if (!state.currentEngagement) return;
+      var engId = state.currentEngagement.engagement_id || state.currentEngagement.id || state.currentEngagement._id;
+      var stageName = getStageConfig(stageKey).name;
+
+      showToast('Executing ' + stageName + '...', 'info');
+
+      executeStage(engId, stageKey).then(function(result) {
+        if (!state.currentEngagement.stages) state.currentEngagement.stages = {};
+        state.currentEngagement.stages[stageKey] = Object.assign(
+          state.currentEngagement.stages[stageKey] || {},
+          { status: 'running', started_at: new Date().toISOString(), thread_id: result.thread_id || result.threadId }
+        );
+        renderEngagementDetail();
+
+        var threadId = result.thread_id || result.threadId;
+        if (threadId) startPolling(threadId, engId, stageKey);
+      }).catch(function(err) {
+        showToast('Failed to execute stage: ' + err.message, 'error');
+      });
+    }
+
+    function handleCancelStage(stageKey) {
+      var eng = state.currentEngagement;
+      if (!eng) return;
+      var stageData = eng.stages && eng.stages[stageKey];
+      var threadId = stageData && (stageData.thread_id || stageData.threadId);
+      if (!threadId) return;
+
+      stopThread(threadId).then(function() {
+        showToast('Stage cancelled', 'info');
+        stopPolling(threadId);
+        return loadEngagementDetail(eng.engagement_id || eng.id || eng._id);
+      }).catch(function(err) {
+        showToast('Failed to cancel: ' + err.message, 'error');
+      });
+    }
+
+    function startPolling(threadId, engId, stageKey) {
+      if (state.polling[threadId]) clearInterval(state.polling[threadId]);
+      state.polling[threadId] = setInterval(function() {
+        pollThread(threadId).then(function(threadData) {
+          var threadStatus = threadData.status;
+
+          // Update live activity data on the running stage
+          if (threadStatus === 'running' && state.currentView === 'engagement' && state.currentEngagement) {
+            var sd = state.currentEngagement.stages && state.currentEngagement.stages[stageKey];
+            if (sd) {
+              sd._live_msg_count = threadData.num_messages || 0;
+              // Build a snippet from the last message
+              var lastContent = threadData.last_message_content || '';
+              if (lastContent) {
+                // Strip markdown syntax for card preview, take last meaningful chunk
+                var lines = lastContent.split('\n').filter(function(l) { return l.trim().length > 0; });
+                var snippet = lines.slice(-6).join('\n');
+                sd._live_snippet = snippet.substring(0, 500);
+              }
+              sd._live_messages = threadData.messages || [];
+              if (threadData.deliverables && threadData.deliverables.length > 0) {
+                sd.deliverables = threadData.deliverables;
+                sd.deliverable_ids = JSON.stringify(threadData.deliverables);
+              }
+            }
+            // Update just the live feed area without full re-render
+            var feedEl = document.getElementById('live-feed-' + stageKey);
+            if (feedEl && sd && sd._live_snippet) {
+              feedEl.textContent = sd._live_snippet;
+            } else if (sd && sd._live_snippet) {
+              // Need a full re-render to create the feed element
+              renderPipelineStages();
+              restartPollingForRunningStages();
+            }
+            // Update message count badge
+            var msgBadge = document.querySelector('#elapsed-' + stageKey);
+            if (msgBadge && sd && sd._live_msg_count > 0) {
+              var parent = msgBadge.parentElement;
+              var existing = parent.querySelector('.msg-count-badge');
+              if (!existing) {
+                var badge = document.createElement('span');
+                badge.className = 'msg-count-badge text-xs bg-kpmg-blue/10 text-kpmg-blue px-1.5 py-0.5 rounded font-medium';
+                badge.textContent = sd._live_msg_count + ' msg' + (sd._live_msg_count > 1 ? 's' : '');
+                parent.appendChild(badge);
+              } else {
+                existing.textContent = sd._live_msg_count + ' msg' + (sd._live_msg_count > 1 ? 's' : '');
+              }
+            }
+            // Update the stage panel if it's open for this stage
+            if (state.selectedStage === stageKey) {
+              updatePanelLiveContent(stageKey, threadData);
+            }
+          }
+
+          if (threadStatus === 'completed' || threadStatus === 'failed' || threadStatus === 'cancelled') {
+            stopPolling(threadId);
+            if (state.currentView === 'engagement') {
+              fetchEngagement(engId).then(function(freshEng) {
+                state.currentEngagement = freshEng;
+                renderEngagementDetail();
+                restartPollingForRunningStages();
+                var stageName = getStageConfig(stageKey).name;
+                if (threadStatus === 'completed') {
+                  showToast(stageName + ' completed successfully!', 'success');
+                } else if (threadStatus === 'failed') {
+                  showToast(stageName + ' failed.', 'error');
+                } else {
+                  showToast(stageName + ' was cancelled.', 'warning');
+                }
+                // Auto-open panel to show results
+                if (threadStatus === 'completed') {
+                  setTimeout(function() { openStagePanel(stageKey); }, 500);
+                }
+              });
+            }
+          }
+        }).catch(function(err) {
+          console.error('Polling error:', err);
+        });
+      }, 5000);
+    }
+
+    function updatePanelLiveContent(stageKey, threadData) {
+      var liveEl = document.getElementById('panel-live-output');
+      if (!liveEl) return;
+      var msgs = threadData.messages || [];
+      if (msgs.length > 0) {
+        liveEl.classList.remove('hidden');
+        var outputDiv = document.getElementById('panel-live-output-content');
+        if (outputDiv) {
+          var wasAtBottom = outputDiv.scrollHeight - outputDiv.scrollTop - outputDiv.clientHeight < 50;
+          outputDiv.innerHTML = renderConversationTimeline(msgs);
+          if (wasAtBottom) outputDiv.scrollTop = outputDiv.scrollHeight;
+        }
+        var countEl = document.getElementById('panel-live-msg-count');
+        if (countEl) countEl.textContent = msgs.length + ' message' + (msgs.length !== 1 ? 's' : '');
+      }
+    }
+
+    function renderConversationTimeline(messages) {
+      if (!messages || messages.length === 0) return '';
+      return '<div class="divide-y divide-gray-100">' + messages.map(function(msg, idx) {
+        var role = msg.role || 'unknown';
+        var content = msg.content || '';
+
+        // Role badge config
+        var roleConfig = {
+          user: { label: 'AOP Prompt', bg: 'bg-kpmg-blue/10', text: 'text-kpmg-blue', icon: '📋' },
+          assistant: { label: 'AI Agent', bg: 'bg-emerald-50', text: 'text-emerald-700', icon: '🤖' },
+          tool: { label: 'Tool Output', bg: 'bg-amber-50', text: 'text-amber-700', icon: '🔧' },
+        };
+        var rc = roleConfig[role] || { label: role, bg: 'bg-gray-100', text: 'text-gray-600', icon: '💬' };
+
+        // For tool messages, show a compact summary
+        var renderedContent = '';
+        if (role === 'tool') {
+          renderedContent = '<div class="text-xs text-kpmg-medium-gray bg-gray-50 rounded p-2 font-mono leading-relaxed" style="max-height:120px;overflow-y:auto;">' + escapeAttr(content) + '</div>';
+        } else {
+          renderedContent = '<div class="prose-ai">' + renderMarkdown(content) + '</div>';
+        }
+
+        var timeStr = '';
+        if (msg.created_at) {
+          timeStr = '<span class="text-[10px] text-kpmg-medium-gray">' + relativeTime(msg.created_at) + '</span>';
+        }
+
+        return '<div class="p-3' + (role === 'assistant' ? ' bg-kpmg-ice/50' : '') + '">' +
+          '<div class="flex items-center gap-2 mb-2">' +
+            '<span class="text-sm">' + rc.icon + '</span>' +
+            '<span class="text-[11px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded ' + rc.bg + ' ' + rc.text + '">' + rc.label + '</span>' +
+            '<span class="text-[10px] text-kpmg-medium-gray">#' + (idx + 1) + '</span>' +
+            timeStr +
+          '</div>' +
+          renderedContent +
+        '</div>';
+      }).join('') + '</div>';
+    }
+
+    function stopPolling(threadId) {
+      if (state.polling[threadId]) {
+        clearInterval(state.polling[threadId]);
+        delete state.polling[threadId];
+      }
+    }
+
+    function cleanupPolling() {
+      Object.keys(state.polling).forEach(function(threadId) {
+        clearInterval(state.polling[threadId]);
+      });
+      state.polling = {};
+    }
+
+    function restartPollingForRunningStages() {
+      var eng = state.currentEngagement;
+      if (!eng || !eng.stages) return;
+      var engId = eng.engagement_id || eng.id || eng._id;
+      Object.keys(eng.stages).forEach(function(stageKey) {
+        var stageData = eng.stages[stageKey];
+ 
+
+... Output truncated at 100000 bytes.
+[Command succeeded with exit code 0]
+[Output was truncated due to size limits]
