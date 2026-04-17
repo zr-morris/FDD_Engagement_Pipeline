@@ -1,4 +1,16 @@
 node_modules
 dist
 .vite
+.env
 .env.local
+*.db
+*.db-shm
+*.db-wal
+deliverables/
+uploads/
+tmp-convert/
+tmp-docs/
+large_tool_results/
+workspace/
+.pm2-dev-agent/
+.deepagents/

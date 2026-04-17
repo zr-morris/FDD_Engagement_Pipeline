@@ -1717,14 +1717,14 @@
 
     // GET /api/engagements
     async function fetchEngagements() {
-      const resp = await fetch('/api/engagements');
+      const resp = await fetch(API_BASE_URL + '/api/engagements');
       if (!resp.ok) throw new Error(`Failed to fetch engagements: ${resp.status}`);
       return resp.json();
     }
 
     // POST /api/engagements
     async function createEngagement(payload) {
-      const resp = await fetch('/api/engagements', {
+      const resp = await fetch(API_BASE_URL + '/api/engagements', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -1735,14 +1735,14 @@
 
     // GET /api/engagements/:id
     async function fetchEngagement(id) {
-      const resp = await fetch(`/api/engagements/${encodeURIComponent(id)}`);
+      const resp = await fetch(`${API_BASE_URL}/api/engagements/${encodeURIComponent(id)}`);
       if (!resp.ok) throw new Error(`Failed to fetch engagement: ${resp.status}`);
       return resp.json();
     }
 
     // POST /api/engagements/:id/execute/:stageKey
     async function executeStage(engagementId, stageKey) {
-      const resp = await fetch(`/api/engagements/${encodeURIComponent(engagementId)}/execute/${encodeURIComponent(stageKey)}`, {
+      const resp = await fetch(`${API_BASE_URL}/api/engagements/${encodeURIComponent(engagementId)}/execute/${encodeURIComponent(stageKey)}`, {
         method: 'POST',
       });
       if (!resp.ok) throw new Error(`Failed to execute stage: ${resp.status}`);
@@ -1751,14 +1751,14 @@
 
     // GET /api/threads/:threadId
     async function pollThread(threadId) {
-      const resp = await fetch(`/api/threads/${encodeURIComponent(threadId)}`);
+      const resp = await fetch(`${API_BASE_URL}/api/threads/${encodeURIComponent(threadId)}`);
       if (!resp.ok) throw new Error(`Failed to poll thread: ${resp.status}`);
       return resp.json();
     }
 
     // POST /api/threads/:threadId/stop
     async function stopThread(threadId) {
-      const resp = await fetch(`/api/threads/${encodeURIComponent(threadId)}/stop`, {
+      const resp = await fetch(`${API_BASE_URL}/api/threads/${encodeURIComponent(threadId)}/stop`, {
         method: 'POST',
       });
       if (!resp.ok) throw new Error(`Failed to stop thread: ${resp.status}`);
@@ -1767,14 +1767,14 @@
 
     // GET /api/engagements/:id/runs/:stageKey
     async function fetchStageRuns(engagementId, stageKey) {
-      const resp = await fetch(`/api/engagements/${encodeURIComponent(engagementId)}/runs/${encodeURIComponent(stageKey)}`);
+      const resp = await fetch(`${API_BASE_URL}/api/engagements/${encodeURIComponent(engagementId)}/runs/${encodeURIComponent(stageKey)}`);
       if (!resp.ok) throw new Error(`Failed to fetch stage runs: ${resp.status}`);
       return resp.json();
     }
 
     // GET /api/config/stages
     async function fetchStageConfig() {
-      const resp = await fetch('/api/config/stages');
+      const resp = await fetch(API_BASE_URL + '/api/config/stages');
       if (!resp.ok) throw new Error(`Failed to fetch stage config: ${resp.status}`);
       return resp.json();
     }
@@ -2717,7 +2717,7 @@
       metaEl.textContent = deliv.filename || '';
 
       // Setup download link - backend auto-converts to docx or xlsx based on content
-      downloadLink.href = `/api/assets/${encodeURIComponent(deliv.filename)}/download`;
+      downloadLink.href = `${API_BASE_URL}/api/assets/${encodeURIComponent(deliv.filename)}/download`;
       downloadLink.download = '';
 
       // Reset state
@@ -2729,7 +2729,7 @@
       overlay.classList.add('open');
 
       try {
-        const resp = await fetch(`/api/assets/${encodeURIComponent(deliv.filename)}/content`);
+        const resp = await fetch(`${API_BASE_URL}/api/assets/${encodeURIComponent(deliv.filename)}/content`);
         if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
         const data = await resp.json();
         const rawContent = data.content || '';

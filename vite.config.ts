@@ -4,6 +4,9 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  // For GitHub Pages: set base to repo name in production
+  // Override with VITE_BASE_PATH env var if needed
+  base: process.env.VITE_BASE_PATH || '/',
   server: {
     host: true,
     port: 5173,
