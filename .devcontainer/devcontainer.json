@@ -4,8 +4,8 @@
   "features": {
     "ghcr.io/devcontainers/features/python:1": { "version": "3.11" }
   },
-  "postCreateCommand": "pnpm install && npm install --prefix . express better-sqlite3 uuid multer && mkdir -p db && node db/seed.js",
-  "postStartCommand": "nohup node server.js > /tmp/server.log 2>&1 &",
+  "postCreateCommand": "pnpm install && npm install --prefix . express better-sqlite3 uuid multer && mkdir -p db && node db/seed.cjs",
+  "postStartCommand": "nohup node server.cjs > /tmp/server.log 2>&1 &",
   "forwardPorts": [5173],
   "portsAttributes": {
     "5173": {

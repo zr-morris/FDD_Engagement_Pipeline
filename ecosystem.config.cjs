@@ -3,7 +3,7 @@ module.exports = {
     {
       name: 'fdd-app',
       script: 'node',
-      args: 'server.js',
+      args: 'server.cjs',
       cwd: '/workspace/kpmg-fdd-pipeline',
       env: { NODE_ENV: 'production', PORT: '5173' },
       autorestart: true,
@@ -14,7 +14,7 @@ module.exports = {
     {
       name: 'fdd-api',
       script: 'node',
-      args: 'server.js',
+      args: 'server.cjs',
       cwd: '/workspace/kpmg-fdd-pipeline',
       env: { NODE_ENV: 'production', PORT: '3000' },
       autorestart: true,
