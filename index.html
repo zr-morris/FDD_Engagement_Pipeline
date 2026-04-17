@@ -1685,15 +1685,42 @@
       return newEng;
     }
 
+    // Stage dependency map for determining ready/locked status
+    const STAGE_DEPS = {
+      stage_0: [],
+      stage_1: ['stage_0'],
+      stage_2: ['stage_1'],
+      stage_3a: ['stage_2'], stage_3b: ['stage_2'], stage_3c: ['stage_2'],
+      stage_3d: ['stage_2'], stage_3e: ['stage_2'], stage_3f: ['stage_2'],
+      stage_3g: ['stage_2'],
+      stage_4: ['stage_3a'],
+      stage_5: ['stage_4'],
+      stage_6: ['stage_5'],
+      stage_7: ['stage_6'],
+      stage_8: ['stage_7']
+    };
+
     function staticFetchEngagement(id) {
       initDemoData();
       const engs = lsGet('engagements', []);
       const eng = engs.find(e => e.engagement_id === id || String(e.id) === String(id));
       if (!eng) throw new Error('Engagement not found');
       const stageData = lsGet('stages_' + eng.engagement_id, {});
+
+      // First pass: collect completed stages
+      const completedSet = new Set();
+      Object.entries(stageData).forEach(([k, v]) => { if (v.status === 'completed') completedSet.add(k); });
+
+      // Second pass: determine status based on dependencies
       const stages = SEED_STAGE_CONFIG.map(sc => {
         const sd = stageData[sc.stage_key] || {};
-        return { ...sc, status: sd.status || 'locked', thread_id: sd.thread_id || null, last_run_at: sd.last_run_at || null, duration: sd.duration || null };
+        let status = sd.status || null;
+        if (!status) {
+          const deps = STAGE_DEPS[sc.stage_key] || [];
+          const depsComplete = deps.length === 0 || deps.every(d => completedSet.has(d));
+          status = depsComplete ? 'ready' : 'locked';
+        }
+        return { ...sc, status, thread_id: sd.thread_id || null, last_run_at: sd.last_run_at || null, duration: sd.duration || null };
       });
       const completed = stages.filter(s => s.status === 'completed').length;
       return { ...eng, stages, completed_stages: completed, progress_pct: Math.round((completed / 15) * 100) };
