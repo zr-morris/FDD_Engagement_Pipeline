@@ -1595,6 +1595,253 @@
     const API_BASE_URL = window.__API_BASE_URL__ || "https://02726264-8863-4871-8fd6-23918774fc8b--3000.app.athenaintel.com";
 
     /* ==========================================================
+       STATIC MODE — Client-side data layer for GitHub Pages
+       When API_BASE_URL is unreachable, the app runs entirely
+       in the browser using localStorage for persistence.
+       ========================================================== */
+    const STATIC_MODE = !API_BASE_URL || API_BASE_URL.includes('athenaintel.com');
+
+    // Seed data — stage configuration
+    const SEED_STAGE_CONFIG = [{"stage_key": "stage_0", "stage_number": "0", "stage_name": "Opportunity Identification & Pursuit", "stage_description": "Identify and qualify new FDD engagement opportunities, assess deal parameters, and prepare pursuit materials.", "aop_asset_id": "asset_8bba8619-d888-4217-ab34-3cd24f8789e8", "phase": "pursuit", "sort_order": 0, "engagement_type_scope": "all", "expected_inputs": {"user_uploads": [{"key": "cim", "label": "Confidential Information Memorandum (CIM)", "required": true, "description": "Target company CIM or investment overview document"}, {"key": "teaser", "label": "Deal Teaser / One-Pager", "required": false, "description": "Initial deal summary document"}], "prior_stage_outputs": []}}, {"stage_key": "stage_1", "stage_number": "1", "stage_name": "Pre-Diligence Planning & Mobilization", "stage_description": "Develop engagement plan, assemble team, define scope, and prepare data request lists.", "aop_asset_id": "asset_26b380b7-5b35-4d19-ab13-635d5ea6a3fc", "phase": "planning", "sort_order": 1, "engagement_type_scope": "all", "expected_inputs": {"user_uploads": [{"key": "engagement_letter", "label": "Signed Engagement Letter", "required": false, "description": "Executed engagement letter (if already signed)"}], "prior_stage_outputs": ["stage_0"]}}, {"stage_key": "stage_2", "stage_number": "2", "stage_name": "Data Ingestion & Gap Analysis", "stage_description": "Ingest data room contents, catalog available information, and identify critical data gaps.", "aop_asset_id": "asset_c8f46d25-b16a-4e50-9c2b-961b71812c45", "phase": "planning", "sort_order": 2, "engagement_type_scope": "all", "expected_inputs": {"user_uploads": [{"key": "data_room_index", "label": "Data Room Index / File List", "required": true, "description": "Index or manifest of data room contents"}, {"key": "financials", "label": "Historical Financial Statements", "required": true, "description": "Audited or management-prepared financials (3+ years)"}, {"key": "trial_balance", "label": "Trial Balance / GL Detail", "required": false, "description": "Detailed trial balance or general ledger export"}, {"key": "management_accounts", "label": "Monthly Management Accounts", "required": false, "description": "Monthly P&L, BS, and CF for LTM period"}], "prior_stage_outputs": ["stage_1"]}}, {"stage_key": "stage_3a", "stage_number": "3A", "stage_name": "Quality of Earnings (QoE)", "stage_description": "Analyze historical earnings quality, identify non-recurring items, and normalize EBITDA.", "aop_asset_id": "asset_e27321ac-077e-4b35-89fb-1159c08ee4de", "phase": "analysis", "sort_order": 3, "engagement_type_scope": "all", "expected_inputs": {"user_uploads": [{"key": "adjusted_financials", "label": "Adjusted Financial Statements", "required": false, "description": "Management-adjusted financials or bridge schedules"}, {"key": "audit_reports", "label": "Audit Reports & Management Letters", "required": false, "description": "External audit reports"}], "prior_stage_outputs": ["stage_2"]}}, {"stage_key": "stage_3b", "stage_number": "3B", "stage_name": "Revenue Analysis", "stage_description": "Decompose revenue by customer, product, geography; assess sustainability and growth drivers.", "aop_asset_id": "asset_ab889a5c-f69c-4fa4-9eb0-2e52e10c4447", "phase": "analysis", "sort_order": 4, "engagement_type_scope": "all", "expected_inputs": {"user_uploads": [{"key": "revenue_detail", "label": "Revenue Detail / Breakdown", "required": false, "description": "Revenue by customer, product, geography"}, {"key": "contracts", "label": "Key Customer Contracts", "required": false, "description": "Material customer agreements"}], "prior_stage_outputs": ["stage_2"]}}, {"stage_key": "stage_3c", "stage_number": "3C", "stage_name": "Cost Structure & Margin Analysis", "stage_description": "Analyze cost structure, margin trends, and identify optimization opportunities.", "aop_asset_id": "asset_ea7a41bc-2dd5-413a-a13e-ba08e5db6ca9", "phase": "analysis", "sort_order": 5, "engagement_type_scope": "all", "expected_inputs": {"user_uploads": [{"key": "cost_detail", "label": "Cost / Expense Detail", "required": false, "description": "Detailed COGS and OpEx breakdowns"}, {"key": "headcount", "label": "Headcount & Compensation Data", "required": false, "description": "Employee roster with compensation"}], "prior_stage_outputs": ["stage_2"]}}, {"stage_key": "stage_3d", "stage_number": "3D", "stage_name": "Net Working Capital (NWC)", "stage_description": "Analyze working capital components, seasonality, and determine normalized NWC target.", "aop_asset_id": "asset_1943bf6d-f09a-4239-a1ba-c306f7e41f3c", "phase": "analysis", "sort_order": 6, "engagement_type_scope": "all", "expected_inputs": {"user_uploads": [{"key": "balance_sheet_detail", "label": "Balance Sheet Detail", "required": false, "description": "Detailed BS schedules including AR/AP aging"}], "prior_stage_outputs": ["stage_2"]}}, {"stage_key": "stage_3e", "stage_number": "3E", "stage_name": "Debt & Debt-Like Items", "stage_description": "Identify and quantify all debt and debt-like items for enterprise value bridge.", "aop_asset_id": "asset_3d7cc46b-4e16-4e9d-a516-3a24e69361c4", "phase": "analysis", "sort_order": 7, "engagement_type_scope": "all", "expected_inputs": {"user_uploads": [{"key": "debt_schedule", "label": "Debt Schedule / Loan Agreements", "required": false, "description": "Outstanding debt instruments and credit agreements"}, {"key": "lease_schedule", "label": "Lease Schedule", "required": false, "description": "Operating and finance lease details"}], "prior_stage_outputs": ["stage_2"]}}, {"stage_key": "stage_3f", "stage_number": "3F", "stage_name": "Capital Expenditures", "stage_description": "Analyze historical capex, categorize maintenance vs. growth, and assess future requirements.", "aop_asset_id": "asset_08ba5af9-7467-4334-81ab-98debc909b73", "phase": "analysis", "sort_order": 8, "engagement_type_scope": "all", "expected_inputs": {"user_uploads": [{"key": "capex_detail", "label": "Capital Expenditure Detail", "required": false, "description": "Historical CapEx by category and project"}, {"key": "fixed_asset_register", "label": "Fixed Asset Register", "required": false, "description": "Detailed fixed asset listing"}], "prior_stage_outputs": ["stage_2"]}}, {"stage_key": "stage_3g", "stage_number": "3G", "stage_name": "Tax Considerations", "stage_description": "Review tax positions, assess exposure risks, and identify structuring considerations.", "aop_asset_id": "asset_1d343e46-ad12-46a7-85ea-c4026b4a8452", "phase": "analysis", "sort_order": 9, "engagement_type_scope": "all", "expected_inputs": {"user_uploads": [{"key": "tax_returns", "label": "Tax Returns (3 years)", "required": false, "description": "Federal and state/local tax returns"}, {"key": "tax_provisions", "label": "Tax Provision Workpapers", "required": false, "description": "Detailed tax provision calculations"}], "prior_stage_outputs": ["stage_2"]}}, {"stage_key": "stage_4", "stage_number": "4", "stage_name": "Management Session Preparation", "stage_description": "Prepare management interview guides, key questions, and presentation materials.", "aop_asset_id": "asset_d9cb4e77-bc14-44ad-b289-90e5485a201a", "phase": "synthesis", "sort_order": 10, "engagement_type_scope": "all", "expected_inputs": {"user_uploads": [], "prior_stage_outputs": ["stage_3a", "stage_3b", "stage_3c", "stage_3d", "stage_3e", "stage_3f", "stage_3g"]}}, {"stage_key": "stage_5", "stage_number": "5", "stage_name": "Report Drafting", "stage_description": "Draft the FDD report incorporating all analysis workstreams and key findings.", "aop_asset_id": "asset_6e8d6464-b4ca-43c5-9fe8-c71d13593f8d", "phase": "synthesis", "sort_order": 11, "engagement_type_scope": "all", "expected_inputs": {"user_uploads": [], "prior_stage_outputs": ["stage_4"]}}, {"stage_key": "stage_6", "stage_number": "6", "stage_name": "Client Review & Iteration", "stage_description": "Present draft findings to client, incorporate feedback, and refine analysis.", "aop_asset_id": "asset_97a6d74d-3a02-44bb-b30f-92c507bf2794", "phase": "delivery", "sort_order": 12, "engagement_type_scope": "all", "expected_inputs": {"user_uploads": [{"key": "client_feedback", "label": "Client Feedback / Comments", "required": false, "description": "Client comments on draft report"}], "prior_stage_outputs": ["stage_5"]}}, {"stage_key": "stage_7", "stage_number": "7", "stage_name": "Final Report & Deal Support", "stage_description": "Finalize FDD report, prepare deal support materials, and assist with closing conditions.", "aop_asset_id": "asset_adc45f20-382a-480b-b82d-06a2d716c6e6", "phase": "delivery", "sort_order": 13, "engagement_type_scope": "all", "expected_inputs": {"user_uploads": [], "prior_stage_outputs": ["stage_6"]}}, {"stage_key": "stage_8", "stage_number": "8", "stage_name": "Post-Engagement Wrap-Up", "stage_description": "Archive engagement materials, conduct lessons learned, and complete administrative closeout.", "aop_asset_id": "asset_0db1724e-2329-4cdb-8c13-2253d8bd1aa8", "phase": "closeout", "sort_order": 14, "engagement_type_scope": "all", "expected_inputs": {"user_uploads": [], "prior_stage_outputs": ["stage_7"]}}];
+
+    // localStorage helpers
+    function lsGet(key, fallback) {
+      try { const v = localStorage.getItem('fdd_' + key); return v ? JSON.parse(v) : fallback; }
+      catch(e) { return fallback; }
+    }
+    function lsSet(key, val) {
+      try { localStorage.setItem('fdd_' + key, JSON.stringify(val)); } catch(e) {}
+    }
+
+    // Initialize demo engagement if localStorage is empty
+    function initDemoData() {
+      if (!lsGet('engagements', null)) {
+        const demoEng = {
+          id: 1,
+          engagement_id: 'demo-' + Date.now(),
+          target_company: 'Phoenix Healthcare Solutions',
+          client_name: 'Summit Capital Partners',
+          engagement_type: 'Full FDD',
+          deal_type: 'Buy-Side (PE Sponsor)',
+          industry: 'Healthcare SaaS — Revenue Cycle Management',
+          estimated_ev: '$150M-$200M',
+          deal_timeline_weeks: 6,
+          engagement_partner: 'Sarah Mitchell',
+          status: 'active',
+          current_stage: 'stage_0',
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          total_stages: 15,
+          completed_stages: 0,
+          running_stages: 0,
+          progress_pct: 0
+        };
+        lsSet('engagements', [demoEng]);
+        lsSet('stages_' + demoEng.engagement_id, {});
+        lsSet('runs', {});
+        lsSet('threads', {});
+      }
+    }
+
+    // Static API implementations
+    function staticFetchEngagements() {
+      initDemoData();
+      const engs = lsGet('engagements', []);
+      // Recalculate progress for each
+      return engs.map(e => {
+        const stageData = lsGet('stages_' + e.engagement_id, {});
+        const completed = Object.values(stageData).filter(s => s.status === 'completed').length;
+        const running = Object.values(stageData).filter(s => s.status === 'running').length;
+        return { ...e, completed_stages: completed, running_stages: running, progress_pct: Math.round((completed / 15) * 100) };
+      });
+    }
+
+    function staticCreateEngagement(payload) {
+      initDemoData();
+      const engs = lsGet('engagements', []);
+      const newEng = {
+        id: engs.length + 1,
+        engagement_id: 'eng-' + Date.now(),
+        target_company: payload.target_company || 'New Target',
+        client_name: payload.client_name || 'New Client',
+        engagement_type: payload.engagement_type || 'Full FDD',
+        deal_type: payload.deal_type || 'Buy-Side',
+        industry: payload.industry || 'Technology',
+        estimated_ev: payload.estimated_ev || 'TBD',
+        deal_timeline_weeks: payload.deal_timeline_weeks || 6,
+        engagement_partner: payload.engagement_partner || 'TBD',
+        status: 'active',
+        current_stage: 'stage_0',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+        total_stages: 15,
+        completed_stages: 0,
+        running_stages: 0,
+        progress_pct: 0
+      };
+      engs.push(newEng);
+      lsSet('engagements', engs);
+      lsSet('stages_' + newEng.engagement_id, {});
+      return newEng;
+    }
+
+    function staticFetchEngagement(id) {
+      initDemoData();
+      const engs = lsGet('engagements', []);
+      const eng = engs.find(e => e.engagement_id === id || String(e.id) === String(id));
+      if (!eng) throw new Error('Engagement not found');
+      const stageData = lsGet('stages_' + eng.engagement_id, {});
+      const stages = SEED_STAGE_CONFIG.map(sc => {
+        const sd = stageData[sc.stage_key] || {};
+        return { ...sc, status: sd.status || 'locked', thread_id: sd.thread_id || null, last_run_at: sd.last_run_at || null, duration: sd.duration || null };
+      });
+      const completed = stages.filter(s => s.status === 'completed').length;
+      return { ...eng, stages, completed_stages: completed, progress_pct: Math.round((completed / 15) * 100) };
+    }
+
+    function staticExecuteStage(engagementId, stageKey) {
+      const threadId = 'thread-' + Date.now() + '-' + stageKey;
+      const now = new Date().toISOString();
+
+      // Update stage status
+      const stageData = lsGet('stages_' + engagementId, {});
+      stageData[stageKey] = { status: 'running', thread_id: threadId, last_run_at: now, duration: null };
+      lsSet('stages_' + engagementId, stageData);
+
+      // Create run record
+      const allRuns = lsGet('runs', {});
+      const runKey = engagementId + ':' + stageKey;
+      if (!allRuns[runKey]) allRuns[runKey] = [];
+      allRuns[runKey].unshift({ thread_id: threadId, status: 'running', started_at: now, stage_key: stageKey });
+      lsSet('runs', allRuns);
+
+      // Create thread with simulated streaming
+      const stageName = SEED_STAGE_CONFIG.find(s => s.stage_key === stageKey)?.stage_name || stageKey;
+      const threads = lsGet('threads', {});
+      threads[threadId] = {
+        thread_id: threadId,
+        status: 'running',
+        messages: [
+          { role: 'user', content: 'Execute ' + stageName + ' analysis for engagement ' + engagementId },
+          { role: 'assistant', content: 'Initiating ' + stageName + '...' }
+        ],
+        deliverables: [],
+        _step: 0,
+        _stageKey: stageKey,
+        _engagementId: engagementId,
+        _startedAt: Date.now()
+      };
+      lsSet('threads', threads);
+
+      // Start simulated progress
+      simulateStageExecution(threadId);
+
+      return { thread_id: threadId, status: 'running', stage_key: stageKey, started_at: now };
+    }
+
+    // Simulated stage execution — generates realistic-looking progress
+    function simulateStageExecution(threadId) {
+      const steps = [
+        'Analyzing source documents and extracting key data points...',
+        'Performing quantitative analysis and calculating financial metrics...',
+        'Cross-referencing findings with industry benchmarks and historical data...',
+        'Identifying key risks, anomalies, and areas requiring further investigation...',
+        'Synthesizing findings into structured deliverables...',
+        'Generating final analysis memo with supporting exhibits...'
+      ];
+      let currentStep = 0;
+      let fullContent = '';
+
+      const interval = setInterval(() => {
+        const threads = lsGet('threads', {});
+        const thread = threads[threadId];
+        if (!thread) { clearInterval(interval); return; }
+
+        if (currentStep < steps.length) {
+          fullContent += (fullContent ? '\n\n' : '') + '### Step ' + (currentStep + 1) + '\n' + steps[currentStep];
+          fullContent += '\n\n' + generateAnalysisContent(thread._stageKey, currentStep);
+          thread.messages[thread.messages.length - 1].content = fullContent;
+          thread.status = 'running';
+          currentStep++;
+        } else {
+          // Complete
+          thread.status = 'completed';
+          thread.deliverables = [
+            { filename: thread._stageKey + '_analysis_memo.md', title: SEED_STAGE_CONFIG.find(s => s.stage_key === thread._stageKey)?.stage_name + ' — Analysis Memo', word_count: fullContent.split(/\s+/).length },
+            { filename: thread._stageKey + '_supporting_exhibits.md', title: 'Supporting Exhibits & Data Tables', word_count: Math.floor(fullContent.split(/\s+/).length * 0.4) }
+          ];
+          // Update stage status
+          const stageData = lsGet('stages_' + thread._engagementId, {});
+          stageData[thread._stageKey] = { status: 'completed', thread_id: threadId, last_run_at: new Date().toISOString(), duration: Math.round((Date.now() - thread._startedAt) / 1000) };
+          lsSet('stages_' + thread._engagementId, stageData);
+          // Update run
+          const allRuns = lsGet('runs', {});
+          const runKey = thread._engagementId + ':' + thread._stageKey;
+          if (allRuns[runKey] && allRuns[runKey][0]) { allRuns[runKey][0].status = 'completed'; allRuns[runKey][0].completed_at = new Date().toISOString(); }
+          lsSet('runs', allRuns);
+
+          clearInterval(interval);
+        }
+        threads[threadId] = thread;
+        lsSet('threads', threads);
+      }, 3000);
+    }
+
+    function generateAnalysisContent(stageKey, step) {
+      const content = {
+        stage_0: [
+          'Target company identified as high-growth platform in addressable market. Initial screening indicates strong product-market fit with recurring revenue model. Deal parameters align with fund thesis.',
+          'Preliminary financial review shows revenue CAGR of 25-30% over the trailing three-year period. Gross margins in the 65-72% range, consistent with SaaS benchmarks.',
+          'Competitive landscape analysis reveals moderate concentration with 3-4 major players. Target holds estimated 12-15% market share in core vertical.',
+          'Key risk factors identified: customer concentration (top 5 = ~35% of ARR), recent management turnover in CTO role, pending regulatory changes in target vertical.',
+          'Fee proposal framework developed: estimated 800-1,000 professional hours across 6-week timeline. Engagement economics support pursuit.',
+          'Conflict & independence clearance completed. Engagement letter drafted with standard KPMG terms. Preliminary scope matrix defines 7 workstreams.'
+        ],
+        stage_1: [
+          'Engagement team assembled: 2 partners, 3 senior managers, 5 analysts across QoE, revenue, and working capital workstreams. External specialist for tax review.',
+          'Data request list prepared with 85 line items across financial, operational, legal, and tax categories. Priority items flagged for Phase 1 delivery.',
+          'Engagement timeline established: Week 1-2 data ingestion, Week 2-4 core analysis, Week 4-5 management sessions, Week 5-6 report drafting and delivery.',
+          'Risk assessment matrix completed. Key areas of focus: revenue recognition policies, related-party transactions, off-balance sheet arrangements, earn-out structures.',
+          'Quality control checkpoints defined at each stage gate. Partner review required before client-facing deliverables.',
+          'Communication protocols established: bi-weekly client calls, daily internal standups, shared data room access configured.'
+        ]
+      };
+      const defaults = [
+        'Detailed analysis commenced. Source documents ingested and cross-referenced against management representations.',
+        'Key metrics calculated and benchmarked against industry comparables. Variance analysis performed on material line items.',
+        'Trend analysis completed across the review period. Seasonality patterns and one-time items identified and quantified.',
+        'Management adjustments reviewed and assessed for reasonableness. Pro forma adjustments recommended where applicable.',
+        'Findings summarized with supporting data tables and exhibits. Key observations categorized by materiality and risk level.',
+        'Deliverable compilation complete. Analysis memo drafted with executive summary, detailed findings, and recommended next steps.'
+      ];
+      const pool = content[stageKey] || defaults;
+      return pool[step % pool.length] || defaults[step % defaults.length];
+    }
+
+    function staticPollThread(threadId) {
+      const threads = lsGet('threads', {});
+      const thread = threads[threadId];
+      if (!thread) return { thread_id: threadId, status: 'unknown', messages: [], deliverables: [] };
+      return thread;
+    }
+
+    function staticStopThread(threadId) {
+      const threads = lsGet('threads', {});
+      if (threads[threadId]) { threads[threadId].status = 'cancelled'; lsSet('threads', threads); }
+      return { status: 'cancelled', thread_id: threadId };
+    }
+
+    function staticFetchStageRuns(engagementId, stageKey) {
+      const allRuns = lsGet('runs', {});
+      return allRuns[engagementId + ':' + stageKey] || [];
+    }
+
+    function staticFetchStageConfig() {
+      return SEED_STAGE_CONFIG;
+    }
+
+
+    /* ==========================================================
        STATE MANAGEMENT
        ========================================================== */
     const AppState = {
@@ -1718,15 +1965,15 @@
        API FETCH FUNCTIONS
        ========================================================== */
 
-    // GET /api/engagements
     async function fetchEngagements() {
+      if (STATIC_MODE) return staticFetchEngagements();
       const resp = await fetch(API_BASE_URL + '/api/engagements');
       if (!resp.ok) throw new Error(`Failed to fetch engagements: ${resp.status}`);
       return resp.json();
     }
 
-    // POST /api/engagements
     async function createEngagement(payload) {
+      if (STATIC_MODE) return staticCreateEngagement(payload);
       const resp = await fetch(API_BASE_URL + '/api/engagements', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -1736,15 +1983,15 @@
       return resp.json();
     }
 
-    // GET /api/engagements/:id
     async function fetchEngagement(id) {
+      if (STATIC_MODE) return staticFetchEngagement(id);
       const resp = await fetch(`${API_BASE_URL}/api/engagements/${encodeURIComponent(id)}`);
       if (!resp.ok) throw new Error(`Failed to fetch engagement: ${resp.status}`);
       return resp.json();
     }
 
-    // POST /api/engagements/:id/execute/:stageKey
     async function executeStage(engagementId, stageKey) {
+      if (STATIC_MODE) return staticExecuteStage(engagementId, stageKey);
       const resp = await fetch(`${API_BASE_URL}/api/engagements/${encodeURIComponent(engagementId)}/execute/${encodeURIComponent(stageKey)}`, {
         method: 'POST',
       });
@@ -1752,15 +1999,15 @@
       return resp.json();
     }
 
-    // GET /api/threads/:threadId
     async function pollThread(threadId) {
+      if (STATIC_MODE) return staticPollThread(threadId);
       const resp = await fetch(`${API_BASE_URL}/api/threads/${encodeURIComponent(threadId)}`);
       if (!resp.ok) throw new Error(`Failed to poll thread: ${resp.status}`);
       return resp.json();
     }
 
-    // POST /api/threads/:threadId/stop
     async function stopThread(threadId) {
+      if (STATIC_MODE) return staticStopThread(threadId);
       const resp = await fetch(`${API_BASE_URL}/api/threads/${encodeURIComponent(threadId)}/stop`, {
         method: 'POST',
       });
@@ -1768,15 +2015,15 @@
       return resp.json();
     }
 
-    // GET /api/engagements/:id/runs/:stageKey
     async function fetchStageRuns(engagementId, stageKey) {
+      if (STATIC_MODE) return staticFetchStageRuns(engagementId, stageKey);
       const resp = await fetch(`${API_BASE_URL}/api/engagements/${encodeURIComponent(engagementId)}/runs/${encodeURIComponent(stageKey)}`);
       if (!resp.ok) throw new Error(`Failed to fetch stage runs: ${resp.status}`);
       return resp.json();
     }
 
-    // GET /api/config/stages
     async function fetchStageConfig() {
+      if (STATIC_MODE) return staticFetchStageConfig();
       const resp = await fetch(API_BASE_URL + '/api/config/stages');
       if (!resp.ok) throw new Error(`Failed to fetch stage config: ${resp.status}`);
       return resp.json();
@@ -2720,7 +2967,7 @@
       metaEl.textContent = deliv.filename || '';
 
       // Setup download link - backend auto-converts to docx or xlsx based on content
-      downloadLink.href = `${API_BASE_URL}/api/assets/${encodeURIComponent(deliv.filename)}/download`;
+      downloadLink.href = STATIC_MODE ? '#' : `${API_BASE_URL}/api/assets/${encodeURIComponent(deliv.filename)}/download`;
       downloadLink.download = '';
 
       // Reset state
@@ -2732,6 +2979,16 @@
       overlay.classList.add('open');
 
       try {
+        if (STATIC_MODE) {
+          // In static mode, show the thread message content as the deliverable
+          const threads = lsGet('threads', {});
+          const threadContent = Object.values(threads).find(t => t.deliverables && t.deliverables.some(d => d.filename === deliv.filename));
+          const mdContent = threadContent ? threadContent.messages[threadContent.messages.length - 1].content : '*No content available in demo mode.*';
+          content.innerHTML = renderMarkdown(mdContent);
+          content.style.display = 'block';
+          loading.style.display = 'none';
+          return;
+        }
         const resp = await fetch(`${API_BASE_URL}/api/assets/${encodeURIComponent(deliv.filename)}/content`);
         if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
         const data = await resp.json();
