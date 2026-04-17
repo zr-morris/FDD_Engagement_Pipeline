@@ -105,5 +105,34 @@ const seedStages = db.transaction((stages) => {
 seedStages(stages);
 
 console.log(`Seeded ${stages.length} stages into stage_config`);
+// Seed demo engagement
+const now = new Date().toISOString();
+
+const existing = db.prepare('SELECT COUNT(*) as cnt FROM engagements').get();
+if (existing.cnt === 0) {
+  const engId = 'demo-phoenix-' + Date.now();
+  db.prepare(`
+    INSERT INTO engagements (engagement_id, target_company, client_name, engagement_type, deal_type, industry, estimated_ev, deal_timeline_weeks, engagement_partner, status, current_stage, created_at, updated_at)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+  `).run(
+    engId,
+    'Phoenix Healthcare Solutions',
+    'Summit Capital Partners',
+    'Full FDD',
+    'Buy-Side (PE Sponsor)',
+    'Healthcare SaaS - Revenue Cycle Management',
+    '$150M-$200M',
+    6,
+    'Sarah Mitchell',
+    'active',
+    'stage_0',
+    now,
+    now
+  );
+  console.log('Seeded demo engagement: Phoenix Healthcare Solutions (' + engId + ')');
+} else {
+  console.log('Engagements already exist (' + existing.cnt + '), skipping demo seed.');
+}
+
 console.log('Database setup complete!');
 db.close();
