@@ -130,8 +130,11 @@ function getStageStatuses(engagementId) {
     const latestRun = stageRuns[0] || null;
     const prereqs = checkPrerequisites(engagementId, stage.stage_key);
     let status = 'locked';
-    if (latestRun) status = latestRun.status;
-    else if (prereqs.met) status = 'ready';
+    if (latestRun && (latestRun.status === 'running' || latestRun.status === 'completed')) {
+      status = latestRun.status;
+    } else if (prereqs.met) {
+      status = 'ready';
+    }
     const inputAnalysis = getStageInputAnalysis(engagementId, stage.stage_key);
     return { ...stage, status, latest_run: latestRun, run_count: stageRuns.length, prerequisites_met: prereqs.met, missing_prerequisites: prereqs.missing, input_analysis: { tagged_files: inputAnalysis.tagged_files, available_prior_outputs: inputAnalysis.available_prior_outputs, gaps: inputAnalysis.gaps, required_gaps: inputAnalysis.required_gaps, expected_uploads: inputAnalysis.expected_uploads, prior_stage_outputs: inputAnalysis.prior_stage_outputs, is_input_ready: inputAnalysis.is_input_ready } };
   });
