@@ -1243,6 +1243,305 @@
       font-weight: 500;
     }
     .back-link:hover { text-decoration: underline; }
+
+    /* ============================================================
+       DATA ROOM VIEW
+       ============================================================ */
+    .dataroom-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+    .dataroom-header h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--kpmg-dark-navy);
+    }
+    .dataroom-header p {
+      color: var(--text-secondary);
+      font-size: 14px;
+      margin-top: 4px;
+    }
+    .dataroom-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .dataroom-controls select {
+      padding: 8px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: var(--font-sans);
+      color: var(--text-primary);
+      min-width: 300px;
+    }
+    .dataroom-controls select:focus {
+      outline: none;
+      border-color: var(--kpmg-light-blue);
+      box-shadow: 0 0 0 3px rgba(0,145,218,0.1);
+    }
+    .dataroom-summary {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .dataroom-summary .stat-card {
+      padding: 16px;
+    }
+    .dataroom-summary .stat-card-value {
+      font-size: 22px;
+    }
+
+    /* Accordion */
+    .dr-accordion {
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 24px;
+      background: var(--bg-white);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+    .dr-accordion-item {
+      border-bottom: 1px solid var(--border-color);
+    }
+    .dr-accordion-item:last-child {
+      border-bottom: none;
+    }
+    .dr-accordion-header {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      cursor: pointer;
+      background: var(--bg-white);
+      transition: background 0.15s;
+      gap: 12px;
+    }
+    .dr-accordion-header:hover {
+      background: #F8FAFF;
+    }
+    .dr-accordion-chevron {
+      font-size: 12px;
+      color: var(--text-muted);
+      transition: transform 0.2s;
+      flex-shrink: 0;
+      width: 16px;
+      text-align: center;
+    }
+    .dr-accordion-item.expanded .dr-accordion-chevron {
+      transform: rotate(90deg);
+    }
+    .dr-accordion-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      flex: 1;
+    }
+    .dr-accordion-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-left: 8px;
+    }
+    .dr-accordion-body {
+      display: none;
+      padding: 0 16px 16px;
+    }
+    .dr-accordion-item.expanded .dr-accordion-body {
+      display: block;
+    }
+
+    /* Stage input status pills */
+    .dr-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 10px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .dr-pill.ready { background: #E6F7ED; color: var(--kpmg-success-green); }
+    .dr-pill.partial { background: #FFF6E0; color: #B8860B; }
+    .dr-pill.missing { background: #FCEAEF; color: var(--kpmg-error-red); }
+    .dr-pill.none { background: #F0F0F0; color: var(--text-muted); }
+
+    /* Expected inputs table */
+    .dr-inputs-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-top: 8px;
+    }
+    .dr-inputs-table th {
+      text-align: left;
+      padding: 8px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+      background: #FAFAFA;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .dr-inputs-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid #F0F0F0;
+      vertical-align: middle;
+    }
+    .dr-inputs-table tr:last-child td { border-bottom: none; }
+
+    .dr-status-uploaded { color: var(--kpmg-success-green); font-weight: 600; }
+    .dr-status-missing { color: var(--kpmg-error-red); font-weight: 500; }
+    .dr-status-optional { color: var(--text-muted); font-weight: 500; }
+
+    /* Drop zone */
+    .dr-dropzone {
+      border: 2px dashed var(--border-color);
+      border-radius: 8px;
+      padding: 32px;
+      text-align: center;
+      margin-bottom: 16px;
+      transition: all 0.2s;
+      cursor: pointer;
+      background: var(--bg-white);
+    }
+    .dr-dropzone:hover, .dr-dropzone.dragover {
+      border-color: var(--kpmg-light-blue);
+      background: #F0F7FF;
+    }
+    .dr-dropzone-icon { font-size: 36px; margin-bottom: 8px; }
+    .dr-dropzone-text { font-size: 14px; color: var(--text-secondary); }
+    .dr-dropzone-text strong { color: var(--kpmg-primary-blue); }
+
+    /* Files table filters */
+    .dr-files-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .dr-files-toolbar input[type="text"] {
+      padding: 7px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 13px;
+      font-family: var(--font-sans);
+      width: 220px;
+    }
+    .dr-files-toolbar input[type="text"]:focus {
+      outline: none;
+      border-color: var(--kpmg-light-blue);
+      box-shadow: 0 0 0 3px rgba(0,145,218,0.1);
+    }
+    .dr-files-toolbar select {
+      padding: 7px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 13px;
+      font-family: var(--font-sans);
+    }
+
+    /* All files table */
+    .dr-files-table {
+      width: 100%;
+      background: var(--bg-white);
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+    .dr-files-table table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .dr-files-table th {
+      text-align: left;
+      padding: 10px 14px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+      background: #FAFAFA;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .dr-files-table td {
+      padding: 10px 14px;
+      font-size: 13px;
+      border-bottom: 1px solid #F0F0F0;
+      vertical-align: middle;
+    }
+    .dr-files-table tr:last-child td { border-bottom: none; }
+    .dr-files-table td select,
+    .dr-files-table td input[type="text"] {
+      padding: 4px 8px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      font-size: 12px;
+      font-family: var(--font-sans);
+      background: var(--bg-white);
+    }
+    .dr-files-table td select:focus,
+    .dr-files-table td input[type="text"]:focus {
+      outline: none;
+      border-color: var(--kpmg-light-blue);
+    }
+
+    /* Stage inputs in slide panel */
+    .stage-input-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 0;
+      border-bottom: 1px solid #F0F0F0;
+      font-size: 13px;
+    }
+    .stage-input-item:last-child { border-bottom: none; }
+    .stage-input-icon { font-size: 16px; flex-shrink: 0; }
+    .stage-input-label { flex: 1; min-width: 0; }
+    .stage-input-label .filename-link {
+      color: var(--kpmg-primary-blue);
+      cursor: pointer;
+      font-weight: 500;
+      text-decoration: none;
+    }
+    .stage-input-label .filename-link:hover { text-decoration: underline; }
+    .stage-input-label .input-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+      display: block;
+    }
+
+    .prior-outputs-list {
+      margin-top: 8px;
+    }
+    .prior-output-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 0;
+      font-size: 13px;
+      border-bottom: 1px solid #F0F0F0;
+    }
+    .prior-output-item:last-child { border-bottom: none; }
+
+    /* Dashboard inputs badge */
+    .inputs-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .inputs-badge.ready { background: #E6F7ED; color: var(--kpmg-success-green); }
+    .inputs-badge.amber { background: #FFF6E0; color: #B8860B; }
+    .inputs-badge.red { background: #FCEAEF; color: var(--kpmg-error-red); }
   </style>
 </head>
 <body>
@@ -1273,6 +1572,10 @@
     <div class="nav-item" data-view="active-engagements" onclick="navigateTo('dashboard')">
       <span class="nav-icon">&#9654;</span>
       <span>Active Engagements</span>
+    </div>
+    <div class="nav-item" data-view="dataroom" onclick="navigateTo('dataroom')">
+      <span class="nav-icon">&#128193;</span>
+      <span>Data Room</span>
     </div>
     <div class="nav-item" data-view="history" onclick="navigateTo('dashboard')">
       <span class="nav-icon">&#128337;</span>
@@ -1333,6 +1636,7 @@
               <th>Client</th>
               <th>Type</th>
               <th>Status</th>
+              <th>Inputs</th>
               <th>Progress</th>
               <th>Created</th>
             </tr>
@@ -1420,6 +1724,65 @@
           <span class="phase-badge">6</span> CLOSEOUT
         </div>
         <div class="stage-cards-single" id="phase-closeout"></div>
+      </div>
+    </div>
+
+    <!-- ==== DATA ROOM VIEW ==== -->
+    <div id="view-dataroom" class="view">
+      <div class="dataroom-header">
+        <div>
+          <h1>Data Room</h1>
+          <p>Upload, tag, and monitor engagement inputs.</p>
+        </div>
+        <button class="btn btn-secondary btn-sm" id="loadPhoenixDemoBtn" onclick="loadPhoenixDemoFiles()" title="Load demo files for Phoenix Healthcare">&#128230; Load Phoenix Demo Files</button>
+      </div>
+
+      <div class="dataroom-controls">
+        <label style="font-size:13px;font-weight:600;color:var(--text-primary);">Engagement:</label>
+        <select id="dataroomEngSelect" onchange="onDataroomEngChange()"></select>
+      </div>
+
+      <!-- Summary strip -->
+      <div class="dataroom-summary" id="dataroomSummary">
+        <div class="stat-card"><div class="stat-card-label">Files Uploaded</div><div class="stat-card-value" id="drStatFiles">--</div></div>
+        <div class="stat-card"><div class="stat-card-label">Total Size</div><div class="stat-card-value" id="drStatSize">--</div></div>
+        <div class="stat-card"><div class="stat-card-label">Required Missing</div><div class="stat-card-value" id="drStatReqGaps">--</div></div>
+        <div class="stat-card"><div class="stat-card-label">Optional Missing</div><div class="stat-card-value" id="drStatOptGaps">--</div></div>
+        <div class="stat-card"><div class="stat-card-label">Stages Ready</div><div class="stat-card-value" id="drStatReady">--</div></div>
+      </div>
+
+      <!-- Expected Inputs by Stage -->
+      <h2 class="section-title">Expected Inputs by Stage</h2>
+      <div class="dr-accordion" id="drAccordion"></div>
+
+      <!-- All Files -->
+      <h2 class="section-title">All Files</h2>
+      <div class="dr-dropzone" id="drDropzone">
+        <div class="dr-dropzone-icon">&#128230;</div>
+        <div class="dr-dropzone-text"><strong>Drop files here</strong> or click to upload</div>
+        <input type="file" id="drFileInput" multiple style="display:none;" onchange="handleDropzoneFiles(this.files)">
+      </div>
+      <div class="dr-files-toolbar">
+        <input type="text" id="drFilterText" placeholder="Filter by filename..." oninput="renderAllFilesTable()">
+        <select id="drFilterStage" onchange="renderAllFilesTable()">
+          <option value="">All stages</option>
+        </select>
+      </div>
+      <div class="dr-files-table" id="drFilesTableContainer">
+        <table>
+          <thead>
+            <tr>
+              <th>Filename</th>
+              <th>Size</th>
+              <th>Type</th>
+              <th>Stage Tag</th>
+              <th>Description</th>
+              <th>Uploaded</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="drFilesBody"></tbody>
+        </table>
       </div>
     </div>
 
@@ -1524,6 +1887,14 @@
           <dt>Last Run</dt><dd id="detailLastRun">--</dd>
           <dt>Duration</dt><dd id="detailDuration">--</dd>
         </dl>
+      </div>
+      <div class="detail-section" id="stageInputsSection" style="display:none;">
+        <h3>Expected Inputs <span id="stageInputsBadge" class="dr-pill" style="margin-left:8px;"></span></h3>
+        <div id="stageInputsList"></div>
+        <div id="priorOutputsSubsection" style="display:none;margin-top:16px;">
+          <h3 style="font-size:12px;">Prior Stage Outputs</h3>
+          <div id="priorOutputsList" class="prior-outputs-list"></div>
+        </div>
       </div>
       <div class="detail-section">
         <h3>Run History</h3>
@@ -1985,6 +2356,9 @@
         if (data && data.id) {
           loadEngagementDetail(data.id);
         }
+      } else if (viewName === 'dataroom') {
+        document.getElementById('view-dataroom').classList.add('active');
+        loadDataRoom();
       }
     }
 
@@ -2129,8 +2503,33 @@
         badge.textContent = eng.status || 'active';
         tdStatus.appendChild(badge);
 
+        // Inputs gap badge
+        const tdInputs = document.createElement('td');
+        const inputsBadge = document.createElement('span');
+        inputsBadge.className = 'inputs-badge';
+        inputsBadge.textContent = '...';
+        inputsBadge.style.color = 'var(--text-muted)';
+        tdInputs.appendChild(inputsBadge);
+        // Async compute gaps
+        (async () => {
+          try {
+            const gapInfo = await computeEngagementGapInfo(eng);
+            if (gapInfo.reqGaps < 0) { inputsBadge.textContent = '--'; return; }
+            if (gapInfo.reqGaps === 0 && gapInfo.optGaps === 0) {
+              inputsBadge.className = 'inputs-badge ready';
+              inputsBadge.textContent = 'Ready';
+            } else if (gapInfo.reqGaps === 0) {
+              inputsBadge.className = 'inputs-badge amber';
+              inputsBadge.textContent = gapInfo.optGaps + ' optional';
+            } else {
+              inputsBadge.className = 'inputs-badge red';
+              inputsBadge.textContent = gapInfo.reqGaps + ' required';
+            }
+          } catch (e) { inputsBadge.textContent = '--'; }
+        })();
+
         const tdProgress = document.createElement('td');
-        const progressPct = calculateEngagementProgress(eng);
+        const progressPct = eng.progress_pct != null ? eng.progress_pct : calculateEngagementProgress(eng);
         tdProgress.textContent = `${progressPct}%`;
         tdProgress.className = 'text-mono';
 
@@ -2142,6 +2541,7 @@
         tr.appendChild(tdClient);
         tr.appendChild(tdType);
         tr.appendChild(tdStatus);
+        tr.appendChild(tdInputs);
         tr.appendChild(tdProgress);
         tr.appendChild(tdCreated);
         tbody.appendChild(tr);
@@ -2703,6 +3103,9 @@
       safeSetText('detailLastRun', formatRelativeTime(stageData.last_run_at));
       safeSetText('detailDuration', stageData.duration ? `${stageData.duration}s` : '--');
 
+      // Render stage inputs
+      renderStageInputsInPanel(stageKey);
+
       // Reset sections
       const deliverablesSection = document.getElementById('deliverablesSection');
       const deliverablesList = document.getElementById('deliverablesList');
@@ -3006,6 +3409,13 @@
       overlay.classList.add('open');
 
       try {
+        // If content is provided directly (e.g. from Data Room file), render it
+        if (deliv.content) {
+          content.innerHTML = renderMarkdown(deliv.content);
+          content.style.display = 'block';
+          loading.style.display = 'none';
+          return;
+        }
         if (STATIC_MODE) {
           // In static mode, show the thread message content as the deliverable
           const threads = lsGet('threads', {});
@@ -3042,10 +3452,853 @@
     }
 
     /* ==========================================================
+       STATIC MODE — FILE OPERATIONS
+       ========================================================== */
+    function staticFetchFiles(engId) {
+      return lsGet('files_' + engId, []);
+    }
+
+    function staticUploadFile(engId, file, stageTag, description) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        const isText = /\.(md|txt|csv|json|xml|html|js|ts|py|yaml|yml|log)$/i.test(file.name) || file.type.startsWith('text/');
+        reader.onload = () => {
+          const files = lsGet('files_' + engId, []);
+          const newFile = {
+            id: 'file-' + Date.now() + '-' + Math.random().toString(36).substr(2, 6),
+            engagement_id: engId,
+            filename: file.name,
+            file_size: file.size,
+            media_type: file.type || 'application/octet-stream',
+            stage_tag: stageTag || null,
+            description: description || '',
+            uploaded_at: new Date().toISOString(),
+            content: reader.result
+          };
+          files.push(newFile);
+          lsSet('files_' + engId, files);
+          resolve(newFile);
+        };
+        reader.onerror = () => reject(new Error('Failed to read file'));
+        if (isText) reader.readAsText(file);
+        else reader.readAsDataURL(file);
+      });
+    }
+
+    function staticUploadFileFromContent(engId, filename, content, stageTag, description) {
+      const files = lsGet('files_' + engId, []);
+      // Remove existing file with same name and stage_tag to avoid duplicates
+      const existingIdx = files.findIndex(f => f.filename === filename && f.stage_tag === stageTag);
+      if (existingIdx >= 0) files.splice(existingIdx, 1);
+      const blob = new Blob([content], { type: 'text/markdown' });
+      const newFile = {
+        id: 'file-' + Date.now() + '-' + Math.random().toString(36).substr(2, 6),
+        engagement_id: engId,
+        filename: filename,
+        file_size: blob.size,
+        media_type: 'text/markdown',
+        stage_tag: stageTag || null,
+        description: description || '',
+        uploaded_at: new Date().toISOString(),
+        content: content
+      };
+      files.push(newFile);
+      lsSet('files_' + engId, files);
+      return newFile;
+    }
+
+    function staticUpdateFile(fileId, patch) {
+      const engs = lsGet('engagements', []);
+      for (const eng of engs) {
+        const files = lsGet('files_' + eng.engagement_id, []);
+        const idx = files.findIndex(f => String(f.id) === String(fileId));
+        if (idx >= 0) {
+          if (patch.stage_tag !== undefined) files[idx].stage_tag = patch.stage_tag || null;
+          if (patch.description !== undefined) files[idx].description = patch.description;
+          lsSet('files_' + eng.engagement_id, files);
+          return files[idx];
+        }
+      }
+      return null;
+    }
+
+    function staticDeleteFile(fileId) {
+      const engs = lsGet('engagements', []);
+      for (const eng of engs) {
+        const files = lsGet('files_' + eng.engagement_id, []);
+        const idx = files.findIndex(f => String(f.id) === String(fileId));
+        if (idx >= 0) {
+          files.splice(idx, 1);
+          lsSet('files_' + eng.engagement_id, files);
+          return { deleted: true };
+        }
+      }
+      return { deleted: false };
+    }
+
+    function staticFetchStageInputs(engId, stageKey) {
+      const stageConfig = SEED_STAGE_CONFIG.find(s => s.stage_key === stageKey);
+      if (!stageConfig) return { expected_uploads: [], prior_stage_outputs: [], tagged_files: [], all_engagement_files: [], available_prior_outputs: {}, gaps: [], required_gaps: [], is_input_ready: true };
+      const expected = stageConfig.expected_inputs || { user_uploads: [], prior_stage_outputs: [] };
+      const allFiles = lsGet('files_' + engId, []);
+      const taggedFiles = allFiles.filter(f => f.stage_tag === stageKey);
+
+      // Check prior outputs
+      const stageData = lsGet('stages_' + engId, {});
+      const priorOutputs = {};
+      for (const pk of (expected.prior_stage_outputs || [])) {
+        const sd = stageData[pk];
+        priorOutputs[pk] = (sd && sd.status === 'completed') ? [pk + '_output'] : null;
+      }
+
+      // Gap analysis
+      const gaps = [];
+      for (const input of (expected.user_uploads || [])) {
+        const hasFile = taggedFiles.some(f => f.description === input.key || (f.filename || '').toLowerCase().includes(input.key.replace(/_/g, ' ')));
+        if (!hasFile) gaps.push({ type: 'upload', key: input.key, label: input.label, severity: input.required ? 'required' : 'optional' });
+      }
+      for (const pk of (expected.prior_stage_outputs || [])) {
+        if (!priorOutputs[pk]) gaps.push({ type: 'prior_output', key: pk, label: 'Output from ' + pk, severity: 'required' });
+      }
+
+      return {
+        expected_uploads: expected.user_uploads || [],
+        prior_stage_outputs: expected.prior_stage_outputs || [],
+        tagged_files: taggedFiles,
+        all_engagement_files: allFiles,
+        available_prior_outputs: priorOutputs,
+        gaps,
+        required_gaps: gaps.filter(g => g.severity === 'required'),
+        is_input_ready: gaps.filter(g => g.severity === 'required' && g.type === 'prior_output').length === 0
+      };
+    }
+
+    /* ==========================================================
+       API WRAPPERS — File operations (branching on STATIC_MODE)
+       ========================================================== */
+    const api = {
+      async listFiles(engId) {
+        if (STATIC_MODE) return staticFetchFiles(engId);
+        const resp = await fetch(`${API_BASE_URL}/api/engagements/${encodeURIComponent(engId)}/files`);
+        if (!resp.ok) throw new Error(`Failed: ${resp.status}`);
+        return resp.json();
+      },
+      async uploadFile(engId, file, stageTag, description) {
+        if (STATIC_MODE) return staticUploadFile(engId, file, stageTag, description);
+        const fd = new FormData();
+        fd.append('file', file);
+        fd.append('stage_tag', stageTag || '');
+        fd.append('description', description || '');
+        const resp = await fetch(`${API_BASE_URL}/api/engagements/${encodeURIComponent(engId)}/files`, { method: 'POST', body: fd });
+        if (!resp.ok) throw new Error(`Upload failed: ${resp.status}`);
+        return resp.json();
+      },
+      async updateFile(fileId, patch) {
+        if (STATIC_MODE) return staticUpdateFile(fileId, patch);
+        const resp = await fetch(`${API_BASE_URL}/api/files/${encodeURIComponent(fileId)}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(patch) });
+        if (!resp.ok) throw new Error(`Update failed: ${resp.status}`);
+        return resp.json();
+      },
+      async deleteFile(fileId) {
+        if (STATIC_MODE) return staticDeleteFile(fileId);
+        const resp = await fetch(`${API_BASE_URL}/api/files/${encodeURIComponent(fileId)}`, { method: 'DELETE' });
+        if (!resp.ok) throw new Error(`Delete failed: ${resp.status}`);
+        return resp.json();
+      },
+      async fetchStageInputs(engId, stageKey) {
+        if (STATIC_MODE) return staticFetchStageInputs(engId, stageKey);
+        const resp = await fetch(`${API_BASE_URL}/api/engagements/${encodeURIComponent(engId)}/stages/${encodeURIComponent(stageKey)}/inputs`);
+        if (!resp.ok) throw new Error(`Failed: ${resp.status}`);
+        return resp.json();
+      }
+    };
+
+    /* ==========================================================
+       DATA ROOM STATE
+       ========================================================== */
+    const DataRoomState = {
+      engId: null,
+      files: [],
+      stageInputs: {}, // keyed by stage_key
+    };
+
+    /* ==========================================================
+       PHOENIX DEMO FILES (inlined for STATIC_MODE, fetched for API)
+       ========================================================== */
+    const PHOENIX_DEMO_MANIFEST = [
+      { filename: 'cim.md', stage_tag: 'stage_0', description: 'cim' },
+      { filename: 'data_room_index.md', stage_tag: 'stage_2', description: 'data_room_index' },
+      { filename: 'financials.md', stage_tag: 'stage_2', description: 'financials' },
+      { filename: 'trial_balance.md', stage_tag: 'stage_2', description: 'trial_balance' },
+      { filename: 'management_accounts.md', stage_tag: 'stage_2', description: 'management_accounts' },
+      { filename: 'revenue_detail.md', stage_tag: 'stage_3b', description: 'revenue_detail' },
+      { filename: 'contracts.md', stage_tag: 'stage_3b', description: 'contracts' },
+      { filename: 'cost_detail.md', stage_tag: 'stage_3c', description: 'cost_detail' },
+      { filename: 'headcount.md', stage_tag: 'stage_3c', description: 'headcount' },
+      { filename: 'balance_sheet_detail.md', stage_tag: 'stage_3d', description: 'balance_sheet_detail' },
+      { filename: 'debt_schedule.md', stage_tag: 'stage_3e', description: 'debt_schedule' },
+      { filename: 'capex_detail.md', stage_tag: 'stage_3f', description: 'capex_detail' },
+      { filename: 'tax_returns.md', stage_tag: 'stage_3g', description: 'tax_returns' },
+    ];
+
+    // Will be populated from phoenix_demo_files.js import or inline
+    let _phoenixDemoContent = null;
+    async function getPhoenixDemoContent() {
+      if (_phoenixDemoContent) return _phoenixDemoContent;
+      try {
+        const mod = await import('./src/phoenix_demo_files.js');
+        _phoenixDemoContent = {};
+        mod.PHOENIX_DEMO_FILES.forEach(f => { _phoenixDemoContent[f.filename] = f.content; });
+        return _phoenixDemoContent;
+      } catch (e) {
+        console.warn('Could not import phoenix_demo_files.js, demo files unavailable in static mode:', e);
+        return null;
+      }
+    }
+
+    async function loadPhoenixDemoFiles() {
+      const engId = DataRoomState.engId;
+      if (!engId) { showToast('No engagement selected', 'warning'); return; }
+
+      const btn = document.getElementById('loadPhoenixDemoBtn');
+      btn.disabled = true;
+      btn.textContent = 'Loading...';
+
+      try {
+        if (STATIC_MODE) {
+          const contents = await getPhoenixDemoContent();
+          if (!contents) { showToast('Demo files not available', 'error'); return; }
+          for (const entry of PHOENIX_DEMO_MANIFEST) {
+            const content = contents[entry.filename];
+            if (content) {
+              staticUploadFileFromContent(engId, entry.filename, content, entry.stage_tag, entry.description);
+            }
+          }
+        } else {
+          // For API mode, load content from embedded phoenix_demo_files.js then upload
+          const demoContent = await getPhoenixDemoContent();
+          for (const entry of PHOENIX_DEMO_MANIFEST) {
+            try {
+              const content = demoContent ? demoContent[entry.filename] : null;
+              if (content) {
+                const blob = new Blob([content], { type: 'text/markdown' });
+                const file = new File([blob], entry.filename, { type: 'text/markdown' });
+                await api.uploadFile(engId, file, entry.stage_tag, entry.description);
+              }
+            } catch (e) {
+              console.warn('Failed to load demo file:', entry.filename, e);
+            }
+          }
+        }
+        showToast('Phoenix demo files loaded successfully!', 'success');
+        await loadDataRoom();
+      } catch (err) {
+        console.error('Load phoenix demo error:', err);
+        showToast('Failed to load demo files: ' + err.message, 'error');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '&#128230; Load Phoenix Demo Files';
+      }
+    }
+
+    /* ==========================================================
+       DATA ROOM — LOAD & RENDER
+       ========================================================== */
+    async function loadDataRoom() {
+      // Ensure engagements are loaded
+      if (!AppState.engagements || AppState.engagements.length === 0) {
+        try {
+          const data = await fetchEngagements();
+          AppState.engagements = data.engagements || data || [];
+        } catch (e) { console.warn('Could not fetch engagements for data room:', e); }
+      }
+      const engSelect = document.getElementById('dataroomEngSelect');
+      const engagements = AppState.engagements || [];
+
+      // Populate engagement selector if empty
+      if (engSelect.options.length === 0 || engSelect.dataset.count !== String(engagements.length)) {
+        engSelect.innerHTML = '';
+        engagements.forEach(eng => {
+          const opt = document.createElement('option');
+          opt.value = eng.engagement_id || eng.id;
+          opt.textContent = (eng.target_company || '--') + ' \u2014 ' + (eng.client_name || '--');
+          engSelect.appendChild(opt);
+        });
+        engSelect.dataset.count = String(engagements.length);
+
+        // Restore selection
+        const saved = lsGet('dataroom_selected_eng', null);
+        if (saved && Array.from(engSelect.options).some(o => o.value === saved)) {
+          engSelect.value = saved;
+        }
+      }
+
+      DataRoomState.engId = engSelect.value;
+      if (!DataRoomState.engId) return;
+      lsSet('dataroom_selected_eng', DataRoomState.engId);
+
+      // Populate stage filter dropdown
+      const stageFilter = document.getElementById('drFilterStage');
+      if (stageFilter.options.length <= 1) {
+        SEED_STAGE_CONFIG.forEach(sc => {
+          const opt = document.createElement('option');
+          opt.value = sc.stage_key;
+          opt.textContent = sc.stage_number + ' — ' + sc.stage_name;
+          stageFilter.appendChild(opt);
+        });
+      }
+
+      try {
+        // Fetch files
+        DataRoomState.files = await api.listFiles(DataRoomState.engId);
+
+        // Fetch stage inputs for all stages
+        DataRoomState.stageInputs = {};
+        const promises = SEED_STAGE_CONFIG.map(async (sc) => {
+          try {
+            DataRoomState.stageInputs[sc.stage_key] = await api.fetchStageInputs(DataRoomState.engId, sc.stage_key);
+          } catch (e) {
+            // Build locally as fallback
+            DataRoomState.stageInputs[sc.stage_key] = staticFetchStageInputs(DataRoomState.engId, sc.stage_key);
+          }
+        });
+        await Promise.all(promises);
+
+        renderDataRoomSummary();
+        renderExpectedInputsAccordion();
+        renderAllFilesTable();
+      } catch (err) {
+        console.error('Data room load error:', err);
+        showToast('Failed to load data room', 'error');
+      }
+    }
+
+    function onDataroomEngChange() {
+      loadDataRoom();
+    }
+
+    function formatFileSize(bytes) {
+      if (!bytes || bytes === 0) return '0 B';
+      const units = ['B', 'KB', 'MB', 'GB'];
+      let i = 0;
+      let size = bytes;
+      while (size >= 1024 && i < units.length - 1) { size /= 1024; i++; }
+      return size.toFixed(i === 0 ? 0 : 1) + ' ' + units[i];
+    }
+
+    function renderDataRoomSummary() {
+      const files = DataRoomState.files;
+      const inputs = DataRoomState.stageInputs;
+
+      const totalFiles = files.length;
+      const totalSize = files.reduce((sum, f) => sum + (f.file_size || 0), 0);
+
+      let reqGaps = 0, optGaps = 0, readyStages = 0;
+      SEED_STAGE_CONFIG.forEach(sc => {
+        const si = inputs[sc.stage_key];
+        if (!si) return;
+        const uploadGaps = (si.gaps || []).filter(g => g.type === 'upload');
+        reqGaps += uploadGaps.filter(g => g.severity === 'required').length;
+        optGaps += uploadGaps.filter(g => g.severity === 'optional').length;
+        const hasExpected = (sc.expected_inputs.user_uploads || []).length > 0;
+        if (hasExpected && uploadGaps.filter(g => g.severity === 'required').length === 0) readyStages++;
+        if (!hasExpected) readyStages++;
+      });
+
+      safeSetText('drStatFiles', String(totalFiles));
+      safeSetText('drStatSize', formatFileSize(totalSize));
+      safeSetText('drStatReqGaps', String(reqGaps));
+      safeSetText('drStatOptGaps', String(optGaps));
+      safeSetText('drStatReady', readyStages + '/' + SEED_STAGE_CONFIG.length);
+    }
+
+    function renderExpectedInputsAccordion() {
+      const container = document.getElementById('drAccordion');
+      container.innerHTML = '';
+
+      SEED_STAGE_CONFIG.forEach((sc, idx) => {
+        const si = DataRoomState.stageInputs[sc.stage_key] || {};
+        const expectedUploads = si.expected_uploads || sc.expected_inputs.user_uploads || [];
+        const taggedFiles = si.tagged_files || DataRoomState.files.filter(f => f.stage_tag === sc.stage_key);
+        const uploadGaps = (si.gaps || []).filter(g => g.type === 'upload');
+
+        // Determine status
+        let pillClass = 'none', pillText = 'No inputs expected';
+        if (expectedUploads.length > 0) {
+          const reqMissing = uploadGaps.filter(g => g.severity === 'required').length;
+          const optMissing = uploadGaps.filter(g => g.severity === 'optional').length;
+          const totalMissing = reqMissing + optMissing;
+          if (totalMissing === 0) { pillClass = 'ready'; pillText = 'Ready'; }
+          else if (reqMissing > 0) { pillClass = 'missing'; pillText = reqMissing + ' required missing'; }
+          else { pillClass = 'partial'; pillText = optMissing + ' optional missing'; }
+        }
+
+        const item = document.createElement('div');
+        item.className = 'dr-accordion-item';
+
+        const header = document.createElement('div');
+        header.className = 'dr-accordion-header';
+        header.onclick = () => item.classList.toggle('expanded');
+        header.innerHTML = `
+          <span class="dr-accordion-chevron">&#9654;</span>
+          <span class="dr-accordion-title">Stage ${sc.stage_number}: ${escapeHtml(sc.stage_name)}</span>
+          <span class="dr-pill ${pillClass}">${escapeHtml(pillText)}</span>
+        `;
+
+        const body = document.createElement('div');
+        body.className = 'dr-accordion-body';
+
+        if (expectedUploads.length > 0) {
+          const table = document.createElement('table');
+          table.className = 'dr-inputs-table';
+          table.innerHTML = '<thead><tr><th>Input Key</th><th>Label</th><th>Required</th><th>Description</th><th>Status</th><th>Action</th></tr></thead>';
+          const tbody = document.createElement('tbody');
+
+          expectedUploads.forEach(input => {
+            const uploaded = taggedFiles.find(f => f.description === input.key || (f.filename || '').toLowerCase().includes(input.key.replace(/_/g, ' ')));
+            const tr = document.createElement('tr');
+
+            const tdKey = document.createElement('td');
+            tdKey.textContent = input.key;
+            tdKey.className = 'text-mono text-sm';
+
+            const tdLabel = document.createElement('td');
+            tdLabel.textContent = input.label;
+
+            const tdReq = document.createElement('td');
+            tdReq.textContent = input.required ? 'Yes' : 'No';
+            tdReq.style.fontWeight = input.required ? '600' : '400';
+            tdReq.style.color = input.required ? 'var(--kpmg-error-red)' : 'var(--text-muted)';
+
+            const tdDesc = document.createElement('td');
+            tdDesc.textContent = input.description || '';
+            tdDesc.className = 'text-sm';
+
+            const tdStatus = document.createElement('td');
+            if (uploaded) {
+              tdStatus.innerHTML = '<span class="dr-status-uploaded">&#10003; Uploaded</span>';
+            } else if (input.required) {
+              tdStatus.innerHTML = '<span class="dr-status-missing">&#10007; Missing</span>';
+            } else {
+              tdStatus.innerHTML = '<span class="dr-status-optional">&#8212; Missing</span>';
+            }
+
+            const tdAction = document.createElement('td');
+            if (uploaded) {
+              const viewBtn = document.createElement('button');
+              viewBtn.className = 'btn btn-sm btn-outline-blue';
+              viewBtn.textContent = 'View';
+              viewBtn.style.marginRight = '4px';
+              viewBtn.onclick = () => openDeliverableViewer({ filename: uploaded.filename, title: uploaded.filename, content: uploaded.content });
+
+              const reupBtn = document.createElement('button');
+              reupBtn.className = 'btn btn-sm btn-secondary';
+              reupBtn.textContent = 'Re-upload';
+              reupBtn.style.marginRight = '4px';
+              reupBtn.onclick = () => triggerInputUpload(sc.stage_key, input.key);
+
+              const rmBtn = document.createElement('button');
+              rmBtn.className = 'btn btn-sm btn-secondary';
+              rmBtn.textContent = 'Remove tag';
+              rmBtn.onclick = async () => {
+                await api.updateFile(uploaded.id, { stage_tag: '', description: '' });
+                showToast('Tag removed', 'info');
+                await loadDataRoom();
+              };
+
+              tdAction.appendChild(viewBtn);
+              tdAction.appendChild(reupBtn);
+              tdAction.appendChild(rmBtn);
+            } else {
+              const upBtn = document.createElement('button');
+              upBtn.className = 'btn btn-sm btn-primary';
+              upBtn.textContent = 'Upload';
+              upBtn.onclick = () => triggerInputUpload(sc.stage_key, input.key);
+              tdAction.appendChild(upBtn);
+            }
+
+            tr.appendChild(tdKey);
+            tr.appendChild(tdLabel);
+            tr.appendChild(tdReq);
+            tr.appendChild(tdDesc);
+            tr.appendChild(tdStatus);
+            tr.appendChild(tdAction);
+            tbody.appendChild(tr);
+          });
+
+          table.appendChild(tbody);
+          body.appendChild(table);
+        }
+
+        // Other tagged files not matching expected keys
+        const expectedKeys = new Set(expectedUploads.map(u => u.key));
+        const otherFiles = taggedFiles.filter(f => !expectedKeys.has(f.description));
+        if (otherFiles.length > 0) {
+          const otherH = document.createElement('p');
+          otherH.style.cssText = 'font-size:12px;font-weight:600;color:var(--text-muted);margin-top:12px;margin-bottom:6px;';
+          otherH.textContent = 'Other tagged files (' + otherFiles.length + ')';
+          body.appendChild(otherH);
+          otherFiles.forEach(f => {
+            const row = document.createElement('div');
+            row.style.cssText = 'font-size:13px;padding:4px 0;';
+            row.textContent = f.filename + ' (' + formatFileSize(f.file_size) + ')';
+            body.appendChild(row);
+          });
+        }
+
+        item.appendChild(header);
+        item.appendChild(body);
+        container.appendChild(item);
+      });
+    }
+
+    function triggerInputUpload(stageKey, inputKey) {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.onchange = async () => {
+        if (!input.files[0]) return;
+        try {
+          await api.uploadFile(DataRoomState.engId, input.files[0], stageKey, inputKey);
+          showToast('File uploaded for ' + inputKey, 'success');
+          await loadDataRoom();
+          // Also refresh slide panel if open
+          const panel = document.getElementById('slidePanel');
+          if (panel.classList.contains('open')) {
+            const currentStageKey = document.getElementById('detailStageKey')?.textContent;
+            if (currentStageKey) {
+              const eng = AppState.currentEngagement;
+              const sd = eng && eng.stages ? eng.stages[currentStageKey] || {} : {};
+              await renderStageInputsInPanel(currentStageKey);
+            }
+          }
+        } catch (err) {
+          showToast('Upload failed: ' + err.message, 'error');
+        }
+      };
+      input.click();
+    }
+
+    function renderAllFilesTable() {
+      const tbody = document.getElementById('drFilesBody');
+      tbody.innerHTML = '';
+
+      const filterText = (document.getElementById('drFilterText')?.value || '').toLowerCase();
+      const filterStage = document.getElementById('drFilterStage')?.value || '';
+
+      let files = DataRoomState.files;
+      if (filterText) files = files.filter(f => (f.filename || '').toLowerCase().includes(filterText));
+      if (filterStage) files = files.filter(f => f.stage_tag === filterStage);
+
+      if (files.length === 0) {
+        const tr = document.createElement('tr');
+        const td = document.createElement('td');
+        td.colSpan = 7;
+        td.className = 'text-muted';
+        td.style.textAlign = 'center';
+        td.style.padding = '24px';
+        td.textContent = 'No files uploaded yet.';
+        tr.appendChild(td);
+        tbody.appendChild(tr);
+        return;
+      }
+
+      // Build stage options HTML once
+      const stageOpts = '<option value="">Unassigned</option>' + SEED_STAGE_CONFIG.map(sc =>
+        `<option value="${sc.stage_key}">${sc.stage_number} — ${escapeHtml(sc.stage_name)}</option>`
+      ).join('');
+
+      files.forEach(f => {
+        const tr = document.createElement('tr');
+
+        const tdName = document.createElement('td');
+        tdName.textContent = f.filename || '--';
+        tdName.style.fontWeight = '500';
+        tdName.style.maxWidth = '200px';
+        tdName.style.overflow = 'hidden';
+        tdName.style.textOverflow = 'ellipsis';
+        tdName.style.whiteSpace = 'nowrap';
+
+        const tdSize = document.createElement('td');
+        tdSize.textContent = formatFileSize(f.file_size);
+        tdSize.className = 'text-mono text-sm';
+
+        const tdType = document.createElement('td');
+        tdType.textContent = f.media_type || '--';
+        tdType.className = 'text-sm text-muted';
+
+        const tdTag = document.createElement('td');
+        const tagSelect = document.createElement('select');
+        tagSelect.innerHTML = stageOpts;
+        tagSelect.value = f.stage_tag || '';
+        tagSelect.onchange = async () => {
+          await api.updateFile(f.id, { stage_tag: tagSelect.value });
+          showToast('Stage tag updated', 'info');
+          await loadDataRoom();
+        };
+        tdTag.appendChild(tagSelect);
+
+        const tdDesc = document.createElement('td');
+        const descInput = document.createElement('input');
+        descInput.type = 'text';
+        descInput.value = f.description || '';
+        descInput.placeholder = 'Description...';
+        descInput.style.width = '140px';
+        descInput.onblur = async () => {
+          if (descInput.value !== (f.description || '')) {
+            await api.updateFile(f.id, { description: descInput.value });
+            showToast('Description updated', 'info');
+          }
+        };
+        tdDesc.appendChild(descInput);
+
+        const tdDate = document.createElement('td');
+        tdDate.textContent = formatRelativeTime(f.uploaded_at);
+        tdDate.className = 'text-muted text-sm';
+
+        const tdDel = document.createElement('td');
+        const delBtn = document.createElement('button');
+        delBtn.className = 'btn btn-sm btn-danger';
+        delBtn.textContent = 'Delete';
+        delBtn.onclick = async () => {
+          if (!confirm('Delete ' + (f.filename || 'this file') + '?')) return;
+          await api.deleteFile(f.id);
+          showToast('File deleted', 'info');
+          await loadDataRoom();
+        };
+        tdDel.appendChild(delBtn);
+
+        tr.appendChild(tdName);
+        tr.appendChild(tdSize);
+        tr.appendChild(tdType);
+        tr.appendChild(tdTag);
+        tr.appendChild(tdDesc);
+        tr.appendChild(tdDate);
+        tr.appendChild(tdDel);
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Dropzone handlers
+    function setupDropzone() {
+      const dz = document.getElementById('drDropzone');
+      if (!dz) return;
+      dz.onclick = () => document.getElementById('drFileInput').click();
+      dz.addEventListener('dragover', (e) => { e.preventDefault(); dz.classList.add('dragover'); });
+      dz.addEventListener('dragleave', () => dz.classList.remove('dragover'));
+      dz.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dz.classList.remove('dragover');
+        if (e.dataTransfer.files.length > 0) handleDropzoneFiles(e.dataTransfer.files);
+      });
+    }
+
+    async function handleDropzoneFiles(fileList) {
+      const engId = DataRoomState.engId;
+      if (!engId) { showToast('No engagement selected', 'warning'); return; }
+      let count = 0;
+      for (const file of fileList) {
+        try {
+          await api.uploadFile(engId, file, '', '');
+          count++;
+        } catch (e) {
+          console.error('Upload error:', e);
+        }
+      }
+      if (count > 0) {
+        showToast(count + ' file(s) uploaded', 'success');
+        await loadDataRoom();
+      }
+    }
+
+    /* ==========================================================
+       STAGE INPUTS — in Slide-Out Panel
+       ========================================================== */
+    async function renderStageInputsInPanel(stageKey) {
+      const section = document.getElementById('stageInputsSection');
+      const list = document.getElementById('stageInputsList');
+      const badge = document.getElementById('stageInputsBadge');
+      const priorSub = document.getElementById('priorOutputsSubsection');
+      const priorList = document.getElementById('priorOutputsList');
+
+      const stageConfig = SEED_STAGE_CONFIG.find(s => s.stage_key === stageKey);
+      if (!stageConfig) { section.style.display = 'none'; return; }
+
+      const expectedUploads = stageConfig.expected_inputs.user_uploads || [];
+      const priorOutputKeys = stageConfig.expected_inputs.prior_stage_outputs || [];
+
+      if (expectedUploads.length === 0 && priorOutputKeys.length === 0) {
+        section.style.display = 'none';
+        return;
+      }
+
+      section.style.display = 'block';
+      list.innerHTML = '';
+      priorList.innerHTML = '';
+
+      const eng = AppState.currentEngagement;
+      const engId = eng ? (eng.engagement_id || eng.id) : null;
+
+      let si;
+      try {
+        if (engId) si = await api.fetchStageInputs(engId, stageKey);
+        else si = { expected_uploads: expectedUploads, tagged_files: [], gaps: [], available_prior_outputs: {} };
+      } catch (e) {
+        si = staticFetchStageInputs(engId || '', stageKey);
+      }
+
+      const taggedFiles = si.tagged_files || [];
+      const uploadGaps = (si.gaps || []).filter(g => g.type === 'upload');
+      const reqMissing = uploadGaps.filter(g => g.severity === 'required').length;
+
+      // Badge
+      if (expectedUploads.length === 0) {
+        badge.className = 'dr-pill none';
+        badge.textContent = 'No uploads needed';
+      } else if (reqMissing > 0) {
+        badge.className = 'dr-pill missing';
+        badge.textContent = reqMissing + ' required missing';
+      } else if (uploadGaps.length > 0) {
+        badge.className = 'dr-pill partial';
+        badge.textContent = uploadGaps.length + ' optional missing';
+      } else {
+        badge.className = 'dr-pill ready';
+        badge.textContent = 'All uploaded';
+      }
+
+      // Expected uploads list
+      expectedUploads.forEach(input => {
+        const uploaded = taggedFiles.find(f => f.description === input.key || (f.filename || '').toLowerCase().includes(input.key.replace(/_/g, ' ')));
+        const item = document.createElement('div');
+        item.className = 'stage-input-item';
+
+        const icon = document.createElement('span');
+        icon.className = 'stage-input-icon';
+
+        const labelDiv = document.createElement('div');
+        labelDiv.className = 'stage-input-label';
+
+        if (uploaded) {
+          icon.textContent = '\u2705';
+          const link = document.createElement('span');
+          link.className = 'filename-link';
+          link.textContent = uploaded.filename;
+          link.onclick = () => openDeliverableViewer({ filename: uploaded.filename, title: uploaded.filename, content: uploaded.content });
+          labelDiv.appendChild(link);
+          const desc = document.createElement('span');
+          desc.className = 'input-desc';
+          desc.textContent = input.label;
+          labelDiv.appendChild(desc);
+        } else {
+          icon.textContent = input.required ? '\u274C' : '\u26A0\uFE0F';
+          const label = document.createElement('span');
+          label.textContent = input.label;
+          label.style.color = input.required ? 'var(--kpmg-error-red)' : 'var(--text-muted)';
+          labelDiv.appendChild(label);
+          const desc = document.createElement('span');
+          desc.className = 'input-desc';
+          desc.textContent = input.description || '';
+          labelDiv.appendChild(desc);
+        }
+
+        item.appendChild(icon);
+        item.appendChild(labelDiv);
+
+        if (!uploaded) {
+          const upBtn = document.createElement('button');
+          upBtn.className = 'btn btn-sm btn-primary';
+          upBtn.textContent = 'Upload';
+          upBtn.onclick = () => {
+            triggerStageInputUpload(stageKey, input.key);
+          };
+          item.appendChild(upBtn);
+        }
+
+        list.appendChild(item);
+      });
+
+      // Prior outputs
+      if (priorOutputKeys.length > 0) {
+        priorSub.style.display = 'block';
+        priorOutputKeys.forEach(pk => {
+          const item = document.createElement('div');
+          item.className = 'prior-output-item';
+          const available = si.available_prior_outputs && si.available_prior_outputs[pk];
+          const icon = document.createElement('span');
+          icon.textContent = available ? '\u2705' : '\u274C';
+          icon.style.fontSize = '14px';
+          const label = document.createElement('span');
+          const priorConfig = SEED_STAGE_CONFIG.find(s => s.stage_key === pk);
+          label.textContent = priorConfig ? ('Stage ' + priorConfig.stage_number + ': ' + priorConfig.stage_name) : pk;
+          label.style.color = available ? 'var(--kpmg-success-green)' : 'var(--text-muted)';
+          item.appendChild(icon);
+          item.appendChild(label);
+          priorList.appendChild(item);
+        });
+      } else {
+        priorSub.style.display = 'none';
+      }
+    }
+
+    function triggerStageInputUpload(stageKey, inputKey) {
+      const eng = AppState.currentEngagement;
+      const engId = eng ? (eng.engagement_id || eng.id) : null;
+      if (!engId) return;
+
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.onchange = async () => {
+        if (!input.files[0]) return;
+        try {
+          await api.uploadFile(engId, input.files[0], stageKey, inputKey);
+          showToast('File uploaded for ' + inputKey, 'success');
+          await renderStageInputsInPanel(stageKey);
+        } catch (err) {
+          showToast('Upload failed: ' + err.message, 'error');
+        }
+      };
+      input.click();
+    }
+
+    /* ==========================================================
+       DASHBOARD — GAP INDICATOR
+       ========================================================== */
+    async function computeEngagementGapInfo(eng) {
+      const engId = eng.engagement_id || eng.id;
+      let reqGaps = 0, optGaps = 0;
+      try {
+        // For efficiency, compute gaps locally using SEED_STAGE_CONFIG and files list
+        let allFiles;
+        try { allFiles = await api.listFiles(engId); } catch (e) { allFiles = []; }
+
+        for (const sc of SEED_STAGE_CONFIG) {
+          const uploads = sc.expected_inputs.user_uploads || [];
+          if (uploads.length === 0) continue;
+          const taggedFiles = allFiles.filter(f => f.stage_tag === sc.stage_key);
+          for (const input of uploads) {
+            const hasFile = taggedFiles.some(f => f.description === input.key || (f.filename || '').toLowerCase().includes(input.key.replace(/_/g, ' ')));
+            if (!hasFile) {
+              if (input.required) reqGaps++;
+              else optGaps++;
+            }
+          }
+        }
+      } catch (e) {
+        return { reqGaps: -1, optGaps: -1 };
+      }
+      return { reqGaps, optGaps };
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    /* ==========================================================
        INITIALIZATION
        ========================================================== */
     document.addEventListener('DOMContentLoaded', () => {
       loadDashboard();
+      setupDropzone();
 
       // Keyboard shortcut: ESC closes modal/panel
       document.addEventListener('keydown', (e) => {
@@ -3063,12 +4316,6 @@
 
     // Cleanup on page unload
     window.addEventListener('beforeunload', () => {
-      cleanupPolling();
-    });
-  </script>
-</body>
-</html>
- {
       cleanupPolling();
     });
   </script>
